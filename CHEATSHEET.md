@@ -2,11 +2,11 @@
 Hello! This is a simple cheatsheet of all the functinality of Nexa. This will go over all the functions, structs, enums, etc and give a short explanation of how they work. Enjoy :)
 
 # DEFINES
-The maximum amount of keys for input
+The maximum amount of keys for input.
 ```c
 #define NX_MAX_KEYS 256
 ```
-The maximum amount of mouse buttons for input
+The maximum amount of mouse buttons for input.
 ```c
 #define NX_MAX_BUTTONS 5
 ```
@@ -103,36 +103,44 @@ All the preset colors available for use.
 ```
 
 # STRUCTS
+The struct for the user to access the low level renderer.
 ```c
-// The struct for the user to access the low level renderer
 typedef struct {			
     SDL_Renderer* renderer; // A variable to access the underlying renderer
 } nxContext;
+```
 
-// The struct for a 2D texture. 
+The struct for a 2D texture.
+```c
 typedef struct {
     SDL_Surface* surface; // Basically the id of the texture
     int width;			  // The width of the texture
     int height;			  // The height of the texture
 } nxTexture2D;
+```
 
-// The struct to make a rgba color.
+The struct to make a rgba color.
+```c
 typedef struct {
     int r;				  // red
     int g;				  // green
     int b;				  // blue
     int a;				  // alpha
 } nxColor;
+```
 
-// The struct to make a simple rectangle shape.
+The struct to make a simple rectangle shape.
+```c
 typedef struct {
     int x;				 // x position
     int y;				 // y position
     int width;			 // width of the rectangle
     int height;			 // height of the rectangle
 } nxRectangle;
+```
 
-// The struct to make an animation.
+The struct to make an animation.
+```c
 typedef struct {
     nxTexture2D texture; // The entire spritesheet texture
     int frame_width;	 // The width of one frame
@@ -147,8 +155,8 @@ typedef struct {
 ```
 
 # ENUMS
+The keys you can use in a program.
 ```c
-// The keys you can use in a program
 typedef enum {
     nxKEY_A = SDL_SCANCODE_A, 			// The 'A' key
     nxKEY_B = SDL_SCANCODE_B, 			// The 'B' key
@@ -184,7 +192,10 @@ typedef enum {
     nxKEY_RIGHT = SDL_SCANCODE_RIGHT, 	// The 'RIGHT' arrow key
     nxMAX_KEYS							// The maximum amount of keys
 } nxKeys;
+```
 
+The mouse buttons you can use in a program.
+```c
 typedef enum {
     nxMOUSE_LEFT = SDL_BUTTON_LEFT,			// The 'LEFT' mouse button
     nxMOUSE_MIDDLE = SDL_BUTTON_MIDDLE,		// The 'MIDDLE' mouse button
@@ -196,80 +207,128 @@ typedef enum {
 ```
 
 # FUNCTIONS
+The function that creates your nexa app.
+You pass in your on_run, update, and render functions and you title, width and height of the window, and whether or not you want to window to be resizable or not.
 ```c
-// The function that creates your nexa app.
-// You pass in your on_run, update, and render functions and you title, width and height of the window, and whether or not you want to window to be resizable or not.
 void nx_start(void (*on_run)(), void (*update)(float), void (*render)(nxContext*), const char* title, int width, int height, bool resizable);
+```
 
-// A simple fucntion to get the position of the mouse.
+A simple fucntion to get the position of the mouse.
+```c
 void nx_get_mouse_position(int* x, int* y);
+```
 
-// The function needed to load a texture to use.
+The function needed to load a texture to use.
+```c
 nxTexture2D nx_load_texture(const char *file_path);
+```
 
-// The function need to load a font to use.
+The function need to load a font to use.
+```c
 TTF_Font* nx_load_font(const char* font_path, int font_size);
+```
 
-// A check to see if a key is held down.
+A check to see if a key is held down.
+```c
 bool nx_is_key_down(nxKeys key);
+```
 
-// A check to see if a key is pressed.
+A check to see if a key is pressed.
+```c
 bool nx_is_key_pressed(nxKeys key);
+```
 
-// A check to see if a mouse button is held down.
+A check to see if a mouse button is held down.
+```c
 bool nx_is_mouse_button_down(nxMouseButtons button);
+```
 
-// A check to see if a mouse button is pressed.
+A check to see if a mouse button is pressed.
+```c
 bool nx_is_mouse_button_pressed(nxMouseButtons button);
+```
 
-// A check to see if 2 rectangles collided with eachother
+A check to see if 2 rectangles collided with eachother
+```c
 bool nx_check_collision_rect(nxRectangle rect1, nxRectangle rect2);
+```
 
-// The function to play a audio file.
+The function to play a audio file.
+```c
 void nx_play_audio(const char* sound);
+```
 
-// The function to play a audio file looped.
+The function to play a audio file looped.
+```c
 void nx_play_audio_looped(const char* sound);
+```
 
-// The function to play music. (Basically just any longer sound file played over and over again)
+The function to play music. (Basically just any longer sound file played over and over again)
+```c
 void nx_play_music_looped(const char* music);
+```
 
-// The function to stop any music playing.
+The function to stop any music playing.
+```c
 void nx_stop_music();
+```
 
-// The function to stop any audio playing
+The function to stop any audio playing
+```c
 void nx_stop_audio();
+```
 
-// The function need to play an animation.
+The function need to play an animation.
+```c
 void nx_update_animation(nxAnimation* anim, float dt, bool looped);
+```
 
-// The function to render an animation to the screen.
+The function to render an animation to the screen.
+```c
 void nx_render_animation(nxContext* ctx, nxAnimation* anim, int dest_x, int dest_y, float scale_x, float scale_y, float rotation);
+```
 
-// The function to render a texture to the screen.
+The function to render a texture to the screen.
+```c
 void nx_render_texture(nxContext* ctx, nxTexture2D* tex, int tex_x, int tex_y, float scale_x, float scale_y, float rotation);
+```
 
-// The function to render text to the screen.
+The function to render text to the screen.
+```c
 void nx_render_text(nxContext* ctx, TTF_Font* font, const char* text, nxColor color, int x, int y, float scale_x, float scale_y);
+```
 
-// The function to render a filled rectangle shape to the screen.
+The function to render a filled rectangle shape to the screen.
+```c
 void nx_render_rect_filled(nxContext* ctx, int x, int y, int width, int height, nxColor color);
+```
 
-// The function to render an outline of a rectangle shape to the screen.
+The function to render an outline of a rectangle shape to the screen.
+```c
 void nx_render_rect_line(nxContext* ctx, int x, int y, int width, int height, nxColor color);
+```
 
-// The function to render a filled circle shape to the screen.
+The function to render a filled circle shape to the screen.
+```c
 void nx_render_circle_filled(nxContext* ctx, int center_x, int center_y, int radius, nxColor color);
+```
 
-// The function to render an outline of a circle shape to the screen.
+The function to render an outline of a circle shape to the screen.
+```c
 void nx_render_circle_line(nxContext* ctx, int center_x, int center_y, int radius, nxColor color);
+```
 
-// The function to render a line to the screen.
+The function to render a line to the screen.
+```c
 void nx_render_line(nxContext* ctx, int x1, int y1, int x2, int y2);
+```
 
-// The function to clear the screen every frame to a certain color.
+The function to clear the screen every frame to a certain color.
+```c
 void nx_clear_screen(nxContext* ctx, nxColor color);
+```
 
-// The function to create a new animation.
+The function to create a new animation.
+```c
 nxAnimation* nx_create_animation(nxTexture2D texture, int frame_width, int frame_height, int num_frames, float frame_time, int start_frame, int end_frame);
 ```
