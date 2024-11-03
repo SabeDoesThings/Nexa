@@ -113,43 +113,43 @@ The struct for a 2D texture.
 ```c
 typedef struct {
     SDL_Surface* surface; // Basically the id of the texture
-    int width;			  // The width of the texture
-    int height;			  // The height of the texture
+    int width;            // The width of the texture
+    int height;           // The height of the texture
 } nxTexture2D;
 ```
 
 The struct to make a rgba color.
 ```c
 typedef struct {
-    int r;				  // red
-    int g;				  // green
-    int b;				  // blue
-    int a;				  // alpha
+    int r;  // red
+    int g;  // green
+    int b;  // blue
+    int a;  // alpha
 } nxColor;
 ```
 
 The struct to make a simple rectangle shape.
 ```c
 typedef struct {
-    int x;				 	// x position
-    int y;				 	// y position
-    int width;			 	// width of the rectangle
-    int height;			 	// height of the rectangle
+    int x;         // x position
+    int y;         // y position
+    int width;     // width of the rectangle
+    int height;    // height of the rectangle
 } nxRectangle;
 ```
 
 The struct to make an animation.
 ```c
 typedef struct {
-    nxTexture2D texture; 	// The entire spritesheet texture
-    int frame_width;	 	// The width of one frame
-    int frame_height;	 	// The height of one frame
-    int num_frames;      	// The number of frames for the animation to go through
-    float frame_time;	 	// How long to stay on a frame
-    int current_frame;	 	// The current frame
-    float elapsed_time;  	// The amount of time that passes between
-    int start_frame;     	// The starting frame of the animation.
-    int end_frame;		 	// The the frame to stop on before looping back.
+    nxTexture2D texture;     // The entire spritesheet texture
+    int frame_width;         // The width of one frame
+    int frame_height;        // The height of one frame
+    int num_frames;          // The number of frames for the animation to go through
+    float frame_time;        // How long to stay on a frame
+    int current_frame;       // The current frame
+    float elapsed_time;      // The amount of time that passes between frames
+    int start_frame;         // The starting frame of the animation
+    int end_frame;           // The frame to stop on before looping back
 } nxAnimation;
 ```
 
@@ -157,51 +157,51 @@ typedef struct {
 The keys you can use in a program.
 ```c
 typedef enum {
-    nxKEY_A = SDL_SCANCODE_A, 				// The 'A' key
-    nxKEY_B = SDL_SCANCODE_B, 				// The 'B' key
-    nxKEY_C = SDL_SCANCODE_C, 				// The 'C' key
-    nxKEY_D = SDL_SCANCODE_D, 				// The 'D' key
-    nxKEY_E = SDL_SCANCODE_E, 				// The 'E' key
-    nxKEY_F = SDL_SCANCODE_F, 				// The 'F' key
-    nxKEY_G = SDL_SCANCODE_G, 				// The 'G' key
-    nxKEY_H = SDL_SCANCODE_H, 				// The 'H' key
-    nxKEY_I = SDL_SCANCODE_I, 				// The 'I' key
-    nxKEY_J = SDL_SCANCODE_J, 				// The 'J' key
-    nxKEY_K = SDL_SCANCODE_K, 				// The 'K' key
-    nxKEY_L = SDL_SCANCODE_L, 				// The 'L' key
-    nxKEY_M = SDL_SCANCODE_M, 				// The 'M' key
-    nxKEY_N = SDL_SCANCODE_N, 				// The 'N' key
-    nxKEY_O = SDL_SCANCODE_O, 				// The 'O' key
-    nxKEY_P = SDL_SCANCODE_P, 				// The 'P' key
-    nxKEY_Q = SDL_SCANCODE_Q, 				// The 'Q' key
-    nxKEY_R = SDL_SCANCODE_R, 				// The 'R' key
-    nxKEY_S = SDL_SCANCODE_S, 				// The 'S' key
-    nxKEY_T = SDL_SCANCODE_T, 				// The 'T' key
-    nxKEY_U = SDL_SCANCODE_U, 				// The 'U' key
-    nxKEY_V = SDL_SCANCODE_V, 				// The 'V' key
-    nxKEY_W = SDL_SCANCODE_W, 				// The 'W' key
-    nxKEY_X = SDL_SCANCODE_X, 				// The 'X' key
-    nxKEY_Y = SDL_SCANCODE_Y, 				// The 'Y' key
-    nxKEY_Z = SDL_SCANCODE_Z, 				// The 'Z' key
-    nxKEY_SPACE = SDL_SCANCODE_SPACE, 		// The 'SPACE' key
-    nxKEY_ESCAPE = SDL_SCANCODE_ESCAPE, 	// The 'ESCAPE' key
-    nxKEY_UP = SDL_SCANCODE_UP, 			// The 'UP' arrow key
-    nxKEY_DOWN = SDL_SCANCODE_DOWN, 		// The 'DOWN' arrow key
-    nxKEY_LEFT = SDL_SCANCODE_LEFT, 		// The 'LEFT' arrow key
-    nxKEY_RIGHT = SDL_SCANCODE_RIGHT, 		// The 'RIGHT' arrow key
-    nxMAX_KEYS								// The maximum amount of keys
+    nxKEY_A      = SDL_SCANCODE_A,     // The 'A' key          
+    nxKEY_B      = SDL_SCANCODE_B,     // The 'B' key          
+    nxKEY_C      = SDL_SCANCODE_C,     // The 'C' key          
+    nxKEY_D      = SDL_SCANCODE_D,     // The 'D' key          
+    nxKEY_E      = SDL_SCANCODE_E,     // The 'E' key          
+    nxKEY_F      = SDL_SCANCODE_F,     // The 'F' key          
+    nxKEY_G      = SDL_SCANCODE_G,     // The 'G' key          
+    nxKEY_H      = SDL_SCANCODE_H,     // The 'H' key          
+    nxKEY_I      = SDL_SCANCODE_I,     // The 'I' key          
+    nxKEY_J      = SDL_SCANCODE_J,     // The 'J' key          
+    nxKEY_K      = SDL_SCANCODE_K,     // The 'K' key          
+    nxKEY_L      = SDL_SCANCODE_L,     // The 'L' key          
+    nxKEY_M      = SDL_SCANCODE_M,     // The 'M' key          
+    nxKEY_N      = SDL_SCANCODE_N,     // The 'N' key          
+    nxKEY_O      = SDL_SCANCODE_O,     // The 'O' key          
+    nxKEY_P      = SDL_SCANCODE_P,     // The 'P' key          
+    nxKEY_Q      = SDL_SCANCODE_Q,     // The 'Q' key          
+    nxKEY_R      = SDL_SCANCODE_R,     // The 'R' key          
+    nxKEY_S      = SDL_SCANCODE_S,     // The 'S' key          
+    nxKEY_T      = SDL_SCANCODE_T,     // The 'T' key          
+    nxKEY_U      = SDL_SCANCODE_U,     // The 'U' key          
+    nxKEY_V      = SDL_SCANCODE_V,     // The 'V' key          
+    nxKEY_W      = SDL_SCANCODE_W,     // The 'W' key          
+    nxKEY_X      = SDL_SCANCODE_X,     // The 'X' key          
+    nxKEY_Y      = SDL_SCANCODE_Y,     // The 'Y' key          
+    nxKEY_Z      = SDL_SCANCODE_Z,     // The 'Z' key          
+    nxKEY_SPACE  = SDL_SCANCODE_SPACE, // The 'SPACE' key      
+    nxKEY_ESCAPE = SDL_SCANCODE_ESCAPE, // The 'ESCAPE' key     
+    nxKEY_UP     = SDL_SCANCODE_UP,    // The 'UP' arrow key   
+    nxKEY_DOWN   = SDL_SCANCODE_DOWN,  // The 'DOWN' arrow key 
+    nxKEY_LEFT   = SDL_SCANCODE_LEFT,  // The 'LEFT' arrow key 
+    nxKEY_RIGHT  = SDL_SCANCODE_RIGHT, // The 'RIGHT' arrow key
+    nxMAX_KEYS                          // The maximum amount of keys
 } nxKeys;
 ```
 
 The mouse buttons you can use in a program.
 ```c
 typedef enum {
-    nxMOUSE_LEFT = SDL_BUTTON_LEFT,				// The 'LEFT' mouse button
-    nxMOUSE_MIDDLE = SDL_BUTTON_MIDDLE,			// The 'MIDDLE' mouse button
-    nxMOUSE_RIGHT = SDL_BUTTON_RIGHT,			// The 'RIGHT' mouse button
-    nxMOUSE_X1 = SDL_BUTTON_X1,					// The 'X1' mouse button
-    nxMOUSE_X2 = SDL_BUTTON_X2,					// The 'X2' mouse button
-    nxMAX_BUTTONS								// The maximum amount of mouse buttons
+    nxMOUSE_LEFT   = SDL_BUTTON_LEFT,      // The 'LEFT' mouse button       
+    nxMOUSE_MIDDLE = SDL_BUTTON_MIDDLE,    // The 'MIDDLE' mouse button     
+    nxMOUSE_RIGHT  = SDL_BUTTON_RIGHT,     // The 'RIGHT' mouse button      
+    nxMOUSE_X1     = SDL_BUTTON_X1,        // The 'X1' mouse button         
+    nxMOUSE_X2     = SDL_BUTTON_X2,        // The 'X2' mouse button         
+    nxMAX_BUTTONS                          // The maximum amount of mouse buttons
 } nxMouseButtons;
 ```
 
