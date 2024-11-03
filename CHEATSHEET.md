@@ -13,93 +13,92 @@ The maximum amount of mouse buttons for input.
 
 All the preset colors available for use.
 ```c
-#define nxWHITE      (nxColor){ 255, 255, 255, 255 }   // White
-#define nxBLACK      (nxColor){ 0, 0, 0, 255 }         // Black
-#define nxRED        (nxColor){ 255, 0, 0, 255 }       // Red
-#define nxGREEN      (nxColor){ 0, 255, 0, 255 }       // Green
-#define nxBLUE       (nxColor){ 0, 0, 255, 255 }       // Blue
-#define nxYELLOW     (nxColor){ 255, 255, 0, 255 }     // Yellow
-#define nxCYAN       (nxColor){ 0, 255, 255, 255 }     // Cyan
-#define nxMAGENTA    (nxColor){ 255, 0, 255, 255 }     // Magenta
-#define nxORANGE     (nxColor){ 255, 165, 0, 255 }     // Orange
-#define nxPURPLE     (nxColor){ 128, 0, 128, 255 }     // Purple
-#define nxBROWN      (nxColor){ 165, 42, 42, 255 }     // Brown
-#define nxGRAY       (nxColor){ 128, 128, 128, 255 }   // Gray
-#define nxLIGHTGRAY  (nxColor){ 211, 211, 211, 255 }   // Light Gray
-#define nxDARKGRAY   (nxColor){ 169, 169, 169, 255 }   // Dark Gray
-#define nxPINK       (nxColor){ 255, 192, 203, 255 }   // Pink
-#define nxGOLD       (nxColor){ 255, 215, 0, 255 }     // Gold
-#define nxSILVER     (nxColor){ 192, 192, 192, 255 }   // Silver
-#define nxMAROON     (nxColor){ 128, 0, 0, 255 }       // Maroon
-#define nxOLIVE      (nxColor){ 128, 128, 0, 255 }     // Olive
-#define nxLIME       (nxColor){ 50, 205, 50, 255 }     // Lime
-#define nxTEAL       (nxColor){ 0, 128, 128, 255 }     // Teal
-#define nxNAVY       (nxColor){ 0, 0, 128, 255 }       // Navy
-#define nxVIOLET     (nxColor){ 238, 130, 238, 255 }   // Violet
-#define nxINDIGO     (nxColor){ 75, 0, 130, 255 }      // Indigo
-#define nxTURQUOISE  (nxColor){ 64, 224, 208, 255 }    // Turquoise
-#define nxPEACH      (nxColor){ 255, 218, 185, 255 }   // Peach
-#define nxMINT       (nxColor){ 189, 252, 201, 255 }   // Mint
-#define nxCORAL      (nxColor){ 255, 127, 80, 255 }    // Coral
-#define nxLIGHTPINK  (nxColor){ 255, 182, 193, 255 }   // Light Pink
-#define nxDARKORANGE (nxColor){ 255, 140, 0, 255 }     // Dark Orange
-#define nxDARKGREEN  (nxColor){ 0, 100, 0, 255 }       // Dark Green
-#define nxDARKBLUE   (nxColor){ 0, 0, 139, 255 }       // Dark Blue
-#define nxLAVENDER   (nxColor){ 230, 230, 250, 255 }   // Lavender
-#define nxCRIMSON    (nxColor){ 220, 20, 60, 255 }     // Crimson
-#define nxFUCHSIA    (nxColor){ 255, 0, 255, 255 }     // Fuchsia
-#define nxLIGHTYELLOW (nxColor){ 255, 255, 224, 255 }  // Light Yellow
-#define nxLIGHTGREEN  (nxColor){ 144, 238, 144, 255 }  // Light Green
-#define nxLIGHTBLUE   (nxColor){ 173, 216, 230, 255 }  // Light Blue
-#define nxLIGHTCORAL  (nxColor){ 240, 128, 128, 255 }  // Light Coral
-#define nxTOMATO     (nxColor){ 255, 99, 71, 255 }     // Tomato
-#define nxSEASHELL   (nxColor){ 255, 228, 196, 255 }   // Seashell
-#define nxHONEYDEW   (nxColor){ 240, 255, 240, 255 }   // Honeydew
-#define nxMISTYROSE  (nxColor){ 255, 228, 225, 255 }   // Misty Rose
-#define nxWHITESMOKE (nxColor){ 245, 245, 245, 255 }   // White Smoke
-#define nxAZURE      (nxColor){ 240, 255, 255, 255 }   // Azure
-#define nxSANDYBROWN (nxColor){ 244, 164, 96, 255 }    // Sandy Brown
-#define nxSLATEGRAY  (nxColor){ 112, 128, 144, 255 }   // Slate Gray
-#define nxKHAKI      (nxColor){ 240, 230, 140, 255 }   // Khaki
-#define nxLIMEGREEN  (nxColor){ 50, 205, 50, 255 }     // Lime Green
-#define nxMEDIUMSLATEBLUE (nxColor){ 123, 104, 238, 255 } // Medium Slate Blue
-#define nxSADDLEBROWN (nxColor){ 139, 69, 19, 255 }    // Saddle Brown
-#define nxSLATEBLUE  (nxColor){ 106, 90, 205, 255 }    // Slate Blue
-#define nxDODGERBLUE (nxColor){ 30, 144, 255, 255 }    // Dodger Blue
-#define nxDEEPSKYBLUE (nxColor){ 0, 191, 255, 255 }    // Deep Sky Blue
-#define nxMEDIUMPURPLE (nxColor){ 147, 112, 219, 255 } // Medium Purple
-#define nxPALEVIOLETRED (nxColor){ 219, 112, 147, 255 } // Pale Violet Red
-#define nxNAVAJOWHITE (nxColor){ 255, 222, 173, 255 }  // Navajo White
-#define nxGAINSBORO  (nxColor){ 220, 220, 220, 255 }   // Gainsboro
-#define nxCHARTREUSE (nxColor){ 127, 255, 0, 255 }     // Chartreuse
-#define nxPLUM       (nxColor){ 221, 160, 221, 255 }   // Plum
-#define nxORCHID     (nxColor){ 218, 112, 214, 255 }   // Orchid
-#define nxPEA        (nxColor){ 197, 227, 132, 255 }   // Pea
-#define nxDARKSALMON (nxColor){ 233, 150, 122, 255 }   // Dark Salmon
-#define nxLIGHTSEAGREEN (nxColor){ 32, 178, 170, 255 } // Light Sea Green
-#define nxMEDIUMAQUAMARINE (nxColor){ 102, 205, 170, 255 } // Medium Aquamarine
-#define nxTHISTLE    (nxColor){ 216, 191, 216, 255 }   // Thistle
-#define nxLIGHTSTEELBLUE (nxColor){ 176, 196, 222, 255 } // Light Steel Blue
-#define nxCADETBLUE  (nxColor){ 95, 158, 160, 255 }    // Cadet Blue
-#define nxDARKCYAN   (nxColor){ 0, 139, 139, 255 }     // Dark Cyan
-#define nxLAVENDERBLUSH (nxColor){ 255, 240, 245, 255 } // Lavender Blush
-#define nxHOTPINK    (nxColor){ 255, 105, 180, 255 }   // Hot Pink
-#define nxSILVERCHALICE (nxColor){ 192, 192, 192, 255 } // Silver Chalice
-#define nxDARKOLIVEGREEN (nxColor){ 85, 107, 47, 255 }  // Dark Olive Green
-#define nxOLIVEGREEN  (nxColor){ 128, 128, 0, 255 }     // Olive Green
-#define nxLIGHTCORAL  (nxColor){ 240, 128, 128, 255 }   // Light Coral
-#define nxTAN        (nxColor){ 210, 180, 140, 255 }    // Tan
-#define nxROSYBROWN  (nxColor){ 188, 143, 143, 255 }    // Rosy Brown
-#define nxTOMATO     (nxColor){ 255, 99, 71, 255 }      // Tomato
-#define nxREDVIOLET  (nxColor){ 207, 50, 119, 255 }     // Red Violet
-#define nxSLATEGRAY  (nxColor){ 112, 128, 144, 255 }    // Slate Gray
-#define nxMIDNIGHTBLUE (nxColor){ 25, 25, 112, 255 }    // Midnight Blue
-#define nxAQUAMARINE (nxColor){ 127, 255, 212, 255 }    // Aquamarine
-#define nxBRIGHTRED  (nxColor){ 255, 0, 0, 255 }        // Bright Red
-#define nxDARKKHAKI  (nxColor){ 189, 183, 107, 255 }    // Dark Khaki
-#define nxTOMATO     (nxColor){ 255, 99, 71, 255 }      // Tomato
-#define nxFIREBRICK  (nxColor){ 178, 34, 34, 255 }      // Firebrick
-#define nxCORNFLOWERBLUE (nxColor){ 100, 149, 237, 255 } // Cornflower Blue
+#define nxWHITE             (nxColor){ 255, 255, 255, 255 }    // White
+#define nxBLACK             (nxColor){ 0, 0, 0, 255 }          // Black
+#define nxRED               (nxColor){ 255, 0, 0, 255 }        // Red
+#define nxGREEN             (nxColor){ 0, 255, 0, 255 }        // Green
+#define nxBLUE              (nxColor){ 0, 0, 255, 255 }        // Blue
+#define nxYELLOW            (nxColor){ 255, 255, 0, 255 }      // Yellow
+#define nxCYAN              (nxColor){ 0, 255, 255, 255 }      // Cyan
+#define nxMAGENTA           (nxColor){ 255, 0, 255, 255 }      // Magenta
+#define nxORANGE            (nxColor){ 255, 165, 0, 255 }      // Orange
+#define nxPURPLE            (nxColor){ 128, 0, 128, 255 }      // Purple
+#define nxBROWN             (nxColor){ 165, 42, 42, 255 }      // Brown
+#define nxGRAY              (nxColor){ 128, 128, 128, 255 }    // Gray
+#define nxLIGHTGRAY         (nxColor){ 211, 211, 211, 255 }    // Light Gray
+#define nxDARKGRAY          (nxColor){ 169, 169, 169, 255 }    // Dark Gray
+#define nxPINK              (nxColor){ 255, 192, 203, 255 }    // Pink
+#define nxGOLD              (nxColor){ 255, 215, 0, 255 }      // Gold
+#define nxSILVER            (nxColor){ 192, 192, 192, 255 }    // Silver
+#define nxMAROON            (nxColor){ 128, 0, 0, 255 }        // Maroon
+#define nxOLIVE             (nxColor){ 128, 128, 0, 255 }      // Olive
+#define nxLIME              (nxColor){ 50, 205, 50, 255 }      // Lime
+#define nxTEAL              (nxColor){ 0, 128, 128, 255 }      // Teal
+#define nxNAVY              (nxColor){ 0, 0, 128, 255 }        // Navy
+#define nxVIOLET            (nxColor){ 238, 130, 238, 255 }    // Violet
+#define nxINDIGO            (nxColor){ 75, 0, 130, 255 }       // Indigo
+#define nxTURQUOISE         (nxColor){ 64, 224, 208, 255 }     // Turquoise
+#define nxPEACH             (nxColor){ 255, 218, 185, 255 }    // Peach
+#define nxMINT              (nxColor){ 189, 252, 201, 255 }    // Mint
+#define nxCORAL             (nxColor){ 255, 127, 80, 255 }     // Coral
+#define nxLIGHTPINK         (nxColor){ 255, 182, 193, 255 }    // Light Pink
+#define nxDARKORANGE        (nxColor){ 255, 140, 0, 255 }      // Dark Orange
+#define nxDARKGREEN         (nxColor){ 0, 100, 0, 255 }        // Dark Green
+#define nxDARKBLUE          (nxColor){ 0, 0, 139, 255 }        // Dark Blue
+#define nxLAVENDER          (nxColor){ 230, 230, 250, 255 }    // Lavender
+#define nxCRIMSON           (nxColor){ 220, 20, 60, 255 }      // Crimson
+#define nxFUCHSIA           (nxColor){ 255, 0, 255, 255 }      // Fuchsia
+#define nxLIGHTYELLOW       (nxColor){ 255, 255, 224, 255 }    // Light Yellow
+#define nxLIGHTGREEN        (nxColor){ 144, 238, 144, 255 }    // Light Green
+#define nxLIGHTBLUE         (nxColor){ 173, 216, 230, 255 }    // Light Blue
+#define nxLIGHTCORAL        (nxColor){ 240, 128, 128, 255 }    // Light Coral
+#define nxTOMATO            (nxColor){ 255, 99, 71, 255 }      // Tomato
+#define nxSEASHELL          (nxColor){ 255, 228, 196, 255 }    // Seashell
+#define nxHONEYDEW          (nxColor){ 240, 255, 240, 255 }    // Honeydew
+#define nxMISTYROSE         (nxColor){ 255, 228, 225, 255 }    // Misty Rose
+#define nxWHITESMOKE        (nxColor){ 245, 245, 245, 255 }    // White Smoke
+#define nxAZURE             (nxColor){ 240, 255, 255, 255 }    // Azure
+#define nxSANDYBROWN        (nxColor){ 244, 164, 96, 255 }     // Sandy Brown
+#define nxSLATEGRAY         (nxColor){ 112, 128, 144, 255 }    // Slate Gray
+#define nxKHAKI             (nxColor){ 240, 230, 140, 255 }    // Khaki
+#define nxLIMEGREEN         (nxColor){ 50, 205, 50, 255 }      // Lime Green
+#define nxMEDIUMSLATEBLUE   (nxColor){ 123, 104, 238, 255 }    // Medium Slate Blue
+#define nxSADDLEBROWN       (nxColor){ 139, 69, 19, 255 }      // Saddle Brown
+#define nxSLATEBLUE         (nxColor){ 106, 90, 205, 255 }     // Slate Blue
+#define nxDODGERBLUE        (nxColor){ 30, 144, 255, 255 }     // Dodger Blue
+#define nxDEEPSKYBLUE       (nxColor){ 0, 191, 255, 255 }      // Deep Sky Blue
+#define nxMEDIUMPURPLE      (nxColor){ 147, 112, 219, 255 }    // Medium Purple
+#define nxPALEVIOLETRED     (nxColor){ 219, 112, 147, 255 }    // Pale Violet Red
+#define nxNAVAJOWHITE       (nxColor){ 255, 222, 173, 255 }    // Navajo White
+#define nxGAINSBORO         (nxColor){ 220, 220, 220, 255 }    // Gainsboro
+#define nxCHARTREUSE        (nxColor){ 127, 255, 0, 255 }      // Chartreuse
+#define nxPLUM              (nxColor){ 221, 160, 221, 255 }    // Plum
+#define nxORCHID            (nxColor){ 218, 112, 214, 255 }    // Orchid
+#define nxPEA               (nxColor){ 197, 227, 132, 255 }    // Pea
+#define nxDARKSALMON        (nxColor){ 233, 150, 122, 255 }    // Dark Salmon
+#define nxLIGHTSEAGREEN     (nxColor){ 32, 178, 170, 255 }     // Light Sea Green
+#define nxMEDIUMAQUAMARINE  (nxColor){ 102, 205, 170, 255 }    // Medium Aquamarine
+#define nxTHISTLE           (nxColor){ 216, 191, 216, 255 }    // Thistle
+#define nxLIGHTSTEELBLUE    (nxColor){ 176, 196, 222, 255 }    // Light Steel Blue
+#define nxCADETBLUE         (nxColor){ 95, 158, 160, 255 }     // Cadet Blue
+#define nxDARKCYAN          (nxColor){ 0, 139, 139, 255 }      // Dark Cyan
+#define nxLAVENDERBLUSH     (nxColor){ 255, 240, 245, 255 }    // Lavender Blush
+#define nxHOTPINK           (nxColor){ 255, 105, 180, 255 }    // Hot Pink
+#define nxSILVERCHALICE     (nxColor){ 192, 192, 192, 255 }    // Silver Chalice
+#define nxDARKOLIVEGREEN    (nxColor){ 85, 107, 47, 255 }      // Dark Olive Green
+#define nxOLIVEGREEN        (nxColor){ 128, 128, 0, 255 }      // Olive Green
+#define nxLIGHTCORAL        (nxColor){ 240, 128, 128, 255 }    // Light Coral
+#define nxTAN               (nxColor){ 210, 180, 140, 255 }    // Tan
+#define nxROSYBROWN         (nxColor){ 188, 143, 143, 255 }    // Rosy Brown
+#define nxTOMATO            (nxColor){ 255, 99, 71, 255 }      // Tomato
+#define nxREDVIOLET         (nxColor){ 207, 50, 119, 255 }     // Red Violet
+#define nxSLATEGRAY         (nxColor){ 112, 128, 144, 255 }    // Slate Gray
+#define nxMIDNIGHTBLUE      (nxColor){ 25, 25, 112, 255 }      // Midnight Blue
+#define nxAQUAMARINE        (nxColor){ 127, 255, 212, 255 }    // Aquamarine
+#define nxBRIGHTRED         (nxColor){ 255, 0, 0, 255 }        // Bright Red
+#define nxDARKKHAKI         (nxColor){ 189, 183, 107, 255 }    // Dark Khaki
+#define nxFIREBRICK         (nxColor){ 178, 34, 34, 255 }      // Firebrick
+#define nxCORNFLOWERBLUE    (nxColor){ 100, 149, 237, 255 }    // Cornflower Blue
 ```
 
 # STRUCTS
