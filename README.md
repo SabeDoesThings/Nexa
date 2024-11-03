@@ -3,4 +3,4 @@
 # Nexa
 A simple c library I use for my games :)
 
-You can find the empty project template [here]()
+You can find the empty project template [here](https://github.com/SabeDoesThings/NexaEmptyProject)
