@@ -1,4 +1,4 @@
-![newnexa](https://github.com/user-attachments/assets/d0bb92ab-c8db-403e-97ec-400b40a47bbc)
+![newnexa](https://github.com/user-attachments/assets/ae297296-a359-4884-b556-7c23594f0b7d)
 
 # Nexa
 A simple c library I use for my games :)
