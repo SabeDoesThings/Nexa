@@ -2,15 +2,16 @@
 Hello! This is a simple cheatsheet of all the functinality of Nexa. This will go over all the functions, structs, enums, etc and give a short explanation of how they work. Enjoy :)
 
 # DEFINES
+The maximum amount of keys for input
 ```c
 #define NX_MAX_KEYS 256
 ```
-The maximum amount of keys for input
+The maximum amount of mouse buttons for input
 ```c
 #define NX_MAX_BUTTONS 5
 ```
-The maximum amount of mouse buttons for input
 
+All the preset colors available for use.
 ```c
 #define nxWHITE      (nxColor){ 255, 255, 255, 255 }   // White
 #define nxBLACK      (nxColor){ 0, 0, 0, 255 }         // Black
@@ -100,7 +101,6 @@ The maximum amount of mouse buttons for input
 #define nxFIREBRICK  (nxColor){ 178, 34, 34, 255 }      // Firebrick
 #define nxCORNFLOWERBLUE (nxColor){ 100, 149, 237, 255 } // Cornflower Blue
 ```
-All the preset colors available for use.
 
 # STRUCTS
 ```c
