@@ -14,9 +14,10 @@
 // ██   ██ ██      ██      ██ ██  ██ ██ ██           ██ 
 // ██████  ███████ ██      ██ ██   ████ ███████ ███████ 
 //
-// >>defines                                                     
-#define MAX_KEYS 30
-#define MAX_BUTTONS 5
+// >>defines
+
+#define NX_MAX_KEYS 256 // Use uppercase for macro definitions
+#define NX_MAX_BUTTONS 5 // Use uppercase for macro definitions
 
 // nxColor Definitions
 #define nxWHITE      (nxColor){ 255, 255, 255, 255 }   // White
@@ -152,15 +153,59 @@ typedef struct {
     int end_frame;
 } nxAnimation;
 
-typedef struct {
-    const char* name;
-    SDL_Scancode scancode;
-} KeyMapEntry;
+// ███████ ███    ██ ██    ██ ███    ███ ███████ 
+// ██      ████   ██ ██    ██ ████  ████ ██      
+// █████   ██ ██  ██ ██    ██ ██ ████ ██ ███████ 
+// ██      ██  ██ ██ ██    ██ ██  ██  ██      ██ 
+// ███████ ██   ████  ██████  ██      ██ ███████ 
+// >>enums                                              
+typedef enum {
+    nxKEY_A = SDL_SCANCODE_A,
+    nxKEY_B = SDL_SCANCODE_B,
+    nxKEY_C = SDL_SCANCODE_C,
+    nxKEY_D = SDL_SCANCODE_D,
+    nxKEY_E = SDL_SCANCODE_E,
+    nxKEY_F = SDL_SCANCODE_F,
+    nxKEY_G = SDL_SCANCODE_G,
+    nxKEY_H = SDL_SCANCODE_H,
+    nxKEY_I = SDL_SCANCODE_I,
+    nxKEY_J = SDL_SCANCODE_J,
+    nxKEY_K = SDL_SCANCODE_K,
+    nxKEY_L = SDL_SCANCODE_L,
+    nxKEY_M = SDL_SCANCODE_M,
+    nxKEY_N = SDL_SCANCODE_N,
+    nxKEY_O = SDL_SCANCODE_O,
+    nxKEY_P = SDL_SCANCODE_P,
+    nxKEY_Q = SDL_SCANCODE_Q,
+    nxKEY_R = SDL_SCANCODE_R,
+    nxKEY_S = SDL_SCANCODE_S,
+    nxKEY_T = SDL_SCANCODE_T,
+    nxKEY_U = SDL_SCANCODE_U,
+    nxKEY_V = SDL_SCANCODE_V,
+    nxKEY_W = SDL_SCANCODE_W,
+    nxKEY_X = SDL_SCANCODE_X,
+    nxKEY_Y = SDL_SCANCODE_Y,
+    nxKEY_Z = SDL_SCANCODE_Z,
+    nxKEY_SPACE = SDL_SCANCODE_SPACE,
+    nxKEY_ESCAPE = SDL_SCANCODE_ESCAPE,
+    nxKEY_UP = SDL_SCANCODE_UP,
+    nxKEY_DOWN = SDL_SCANCODE_DOWN,
+    nxKEY_LEFT = SDL_SCANCODE_LEFT,
+    nxKEY_RIGHT = SDL_SCANCODE_RIGHT,
+    nxMAX_KEYS
+} nxKeys;
 
-typedef struct {
-    const char* name;
-    Uint8 button;
-} MouseButtonEntry;
+typedef enum {
+    nxMOUSE_LEFT = SDL_BUTTON_LEFT,
+    nxMOUSE_MIDDLE = SDL_BUTTON_MIDDLE,
+    nxMOUSE_RIGHT = SDL_BUTTON_RIGHT,
+    nxMOUSE_X1 = SDL_BUTTON_X1,
+    nxMOUSE_X2 = SDL_BUTTON_X2,
+    nxMAX_BUTTONS
+} nxMouseButtons;
+
+extern int previous_key_states[NX_MAX_KEYS];
+extern int previous_mouse_button_states[NX_MAX_BUTTONS];
 
 // ███████ ██    ██ ███    ██  ██████ ████████ ██  ██████  ███    ██ ███████ 
 // ██      ██    ██ ████   ██ ██         ██    ██ ██    ██ ████   ██ ██      
@@ -185,12 +230,10 @@ void nx_start(
 void nx_get_mouse_position(int* x, int* y);
 nxTexture2D nx_load_texture(const char *file_path);
 TTF_Font* nx_load_font(const char* font_path, int font_size);
-SDL_Scancode nx_get_scancode(const char* key);
-Uint8 nx_get_mouse_button_code(const char* button);
-bool nx_is_key_down(const char* key);
-bool nx_is_key_pressed(const char* key);
-bool nx_is_mouse_button_down(const char* button);
-bool nx_is_mouse_button_pressed(const char* button);
+bool nx_is_key_down(nxKeys key);
+bool nx_is_key_pressed(nxKeys key);
+bool nx_is_mouse_button_down(nxMouseButtons button);
+bool nx_is_mouse_button_pressed(nxMouseButtons button);
 bool nx_check_collision_rect(nxRectangle rect1, nxRectangle rect2);
 void nx_play_audio(const char* sound);
 void nx_play_music_looped(const char* music);
@@ -198,8 +241,8 @@ void nx_play_audio_looped(const char* sound);
 void nx_stop_music();
 void nx_stop_audio();
 void nx_update_animation(nxAnimation* anim, float dt, bool looped);
-void nx_render_animation(nxContext* ctx, nxAnimation* anim, int dest_x, int dest_y, float scale_x, float scale_y);
-void nx_render_texture(nxContext* ctx, nxTexture2D* tex, int tex_x, int tex_y, float scale_x, float scale_y);
+void nx_render_animation(nxContext* ctx, nxAnimation* anim, int dest_x, int dest_y, float scale_x, float scale_y, float rotation);
+void nx_render_texture(nxContext* ctx, nxTexture2D* tex, int tex_x, int tex_y, float scale_x, float scale_y, float rotation);
 SDL_Color nx_convert_color(nxColor color);
 void nx_render_text(nxContext* ctx, TTF_Font* font, const char* text, nxColor color, int x, int y, float scale_x, float scale_y);
 void nx_render_rect_filled(nxContext* ctx, int x, int y, int width, int height, nxColor color);
@@ -218,27 +261,9 @@ nxAnimation* nx_create_animation(nxTexture2D texture, int frame_width, int frame
 //
 // >>implementation
 #ifdef NEXA_IMPLEMENTATION
-KeyMapEntry key_map[] = {
-    {"a", SDL_SCANCODE_A}, {"b", SDL_SCANCODE_B}, {"c", SDL_SCANCODE_C},
-    {"d", SDL_SCANCODE_D}, {"e", SDL_SCANCODE_E}, {"f", SDL_SCANCODE_F},
-    {"g", SDL_SCANCODE_G}, {"h", SDL_SCANCODE_H}, {"i", SDL_SCANCODE_I},
-    {"j", SDL_SCANCODE_J}, {"k", SDL_SCANCODE_K}, {"l", SDL_SCANCODE_L},
-    {"m", SDL_SCANCODE_M}, {"n", SDL_SCANCODE_N}, {"o", SDL_SCANCODE_O},
-    {"p", SDL_SCANCODE_P}, {"q", SDL_SCANCODE_Q}, {"r", SDL_SCANCODE_R},
-    {"s", SDL_SCANCODE_S}, {"t", SDL_SCANCODE_T}, {"u", SDL_SCANCODE_U},
-    {"v", SDL_SCANCODE_V}, {"w", SDL_SCANCODE_W}, {"x", SDL_SCANCODE_X},
-    {"y", SDL_SCANCODE_Y}, {"z", SDL_SCANCODE_Z}, {"space", SDL_SCANCODE_SPACE},
-    {"escape", SDL_SCANCODE_ESCAPE}, {"up", SDL_SCANCODE_UP},
-    {"down", SDL_SCANCODE_DOWN}, {"left", SDL_SCANCODE_LEFT}, {"right", SDL_SCANCODE_RIGHT}
-};
 
-int previous_key_states[MAX_KEYS] = {0};
-int previous_mouse_button_states[MAX_BUTTONS] = {0};
-
-MouseButtonEntry mouse_button_map[] = {
-    {"left", SDL_BUTTON_LEFT}, {"middle", SDL_BUTTON_MIDDLE},
-    {"right", SDL_BUTTON_RIGHT}, {"x1", SDL_BUTTON_X1}, {"x2", SDL_BUTTON_X2}
-};
+int previous_key_states[NX_MAX_KEYS];
+int previous_mouse_button_states[NX_MAX_BUTTONS];
 
 bool nx_init() {
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
@@ -261,6 +286,7 @@ bool nx_init() {
         fprintf(stderr, "SDL_mixer could not initialize WAV! SDL_mixer Error: %s\n", Mix_GetError());
         return false;
     }
+    return true;
 }
 
 SDL_Window* nx_create_window(const char* title, int width, int height) {
@@ -373,39 +399,15 @@ TTF_Font* nx_load_font(const char* font_path, int font_size) {
     return font;
 }
 
-SDL_Scancode nx_get_scancode(const char* key) {
-    for (int i = 0; i < MAX_KEYS; i++) {
-        if (strcmp(key_map[i].name, key) == 0) {
-            return key_map[i].scancode;
-        }
-    }
-
-    return SDL_SCANCODE_UNKNOWN;
-}
-
-Uint8 nx_get_mouse_button_code(const char* button) {
-    for (int i = 0; i < MAX_BUTTONS; i++) {
-        if (strcmp(mouse_button_map[i].name, button) == 0) {
-            return mouse_button_map[i].button;
-        }
-    }
-
-    return 0;
-}
-
-bool nx_is_key_down(const char* key) {
-    SDL_Scancode scancode = nx_get_scancode(key);
+bool nx_is_key_down(nxKeys key) {
     const Uint8* key_state = SDL_GetKeyboardState(NULL);
-
-    return key_state[scancode] == 1;
+    return key_state[key] == 1;
 }
 
-bool nx_is_key_pressed(const char* key) {
-    SDL_Scancode scancode = nx_get_scancode(key);
+bool nx_is_key_pressed(nxKeys key) {
     const Uint8* key_state = SDL_GetKeyboardState(NULL);
-
-    int current_state = key_state[scancode];
-    int index = scancode - SDL_SCANCODE_A; // Adjust index if needed
+    int current_state = key_state[key];
+    int index = key; // No need for adjustment due to direct mapping
     int previous_state = previous_key_states[index];
 
     previous_key_states[index] = current_state;
@@ -413,18 +415,15 @@ bool nx_is_key_pressed(const char* key) {
     return current_state == 1 && previous_state == 0;
 }
 
-bool nx_is_mouse_button_down(const char* button) {
-    Uint8 button_code = nx_get_mouse_button_code(button);
+bool nx_is_mouse_button_down(nxMouseButtons button) {
     Uint32 mouse_state = SDL_GetMouseState(NULL, NULL);
-    return (mouse_state & SDL_BUTTON(button_code)) != 0;
+    return (mouse_state & SDL_BUTTON(button)) != 0;
 }
 
-bool nx_is_mouse_button_pressed(const char* button) {
-    Uint8 button_code = nx_get_mouse_button_code(button);
+bool nx_is_mouse_button_pressed(nxMouseButtons button) {
     Uint32 mouse_state = SDL_GetMouseState(NULL, NULL);
-
-    int current_state = (mouse_state & SDL_BUTTON(button_code)) ? 1 : 0;
-    int index = button_code - SDL_BUTTON_LEFT; // Adjust index if needed
+    int current_state = (mouse_state & SDL_BUTTON(button)) ? 1 : 0;
+    int index = button - SDL_BUTTON_LEFT; // Adjust index if needed
     int previous_state = previous_mouse_button_states[index];
 
     previous_mouse_button_states[index] = current_state;
@@ -529,7 +528,7 @@ void nx_update_animation(nxAnimation* anim, float dt, bool looped) {
     }
 }
 
-void nx_render_animation(nxContext* ctx, nxAnimation* anim, int dest_x, int dest_y, float scale_x, float scale_y) {
+void nx_render_animation(nxContext* ctx, nxAnimation* anim, int dest_x, int dest_y, float scale_x, float scale_y, float rotation) {
     SDL_Texture* tex = SDL_CreateTextureFromSurface(ctx->renderer, anim->texture.surface);
     if (!tex) {
         fprintf(stderr, "Failed to create texture! ERROR: %s\n", SDL_GetError());
@@ -543,13 +542,15 @@ void nx_render_animation(nxContext* ctx, nxAnimation* anim, int dest_x, int dest
     int scaled_height = (int)(anim->frame_height * scale_y);
 
     SDL_Rect dst_rect = { dest_x, dest_y, scaled_width, scaled_height };
-    SDL_RenderCopy(ctx->renderer, tex, &src_rect, &dst_rect);
+    SDL_Point center = { scaled_width / 2, scaled_height / 2 };  // Rotation center at the center of the frame
+
+    // Use SDL_RenderCopyEx to apply rotation
+    SDL_RenderCopyEx(ctx->renderer, tex, &src_rect, &dst_rect, rotation, &center, SDL_FLIP_NONE);
 
     SDL_DestroyTexture(tex);
 }
 
-
-void nx_render_texture(nxContext* ctx, nxTexture2D* tex, int tex_x, int tex_y, float scale_x, float scale_y) {
+void nx_render_texture(nxContext* ctx, nxTexture2D* tex, int tex_x, int tex_y, float scale_x, float scale_y, float rotation) {
     SDL_Texture* texture = SDL_CreateTextureFromSurface(ctx->renderer, tex->surface);
 
     int width = 0, height = 0;
@@ -562,7 +563,9 @@ void nx_render_texture(nxContext* ctx, nxTexture2D* tex, int tex_x, int tex_y, f
     int scaled_height = (int)(height * scale_y);
 
     SDL_Rect dst = {tex_x, tex_y, scaled_width, scaled_height};
-    SDL_RenderCopy(ctx->renderer, texture, NULL, &dst);
+    SDL_Point center = {scaled_width / 2, scaled_height / 2};
+
+    SDL_RenderCopyEx(ctx->renderer, texture, NULL, &dst, rotation, &center, SDL_FLIP_NONE);
 
     SDL_DestroyTexture(texture);
 }
