@@ -209,7 +209,15 @@ typedef enum {
 The function that creates your nexa app.
 You pass in your on_run, update, and render functions and you title, width and height of the window, and whether or not you want to window to be resizable or not.
 ```c
-void nx_start(void (*on_run)(), void (*update)(float), void (*render)(nxContext*), const char* title, int width, int height, bool resizable);
+void nx_start(
+	void (*on_run)(), 
+	void (*update)(float), 
+	void (*render)(nxContext*), 
+	const char* title, 
+	int width, 
+	int height, 
+	bool resizable
+);
 ```
 
 A simple fucntion to get the position of the mouse.
@@ -284,17 +292,42 @@ void nx_update_animation(nxAnimation* anim, float dt, bool looped);
 
 The function to render an animation to the screen.
 ```c
-void nx_render_animation(nxContext* ctx, nxAnimation* anim, int dest_x, int dest_y, float scale_x, float scale_y, float rotation);
+void nx_render_animation(
+	nxContext* ctx, 
+	nxAnimation* anim, 
+	int dest_x, 
+	int dest_y, 
+	float scale_x, 
+	float scale_y, 
+	float rotation
+);
 ```
 
 The function to render a texture to the screen.
 ```c
-void nx_render_texture(nxContext* ctx, nxTexture2D* tex, int tex_x, int tex_y, float scale_x, float scale_y, float rotation);
+void nx_render_texture(
+	nxContext* ctx, 
+	nxTexture2D* tex, 
+	int tex_x, 
+	int tex_y, 
+	float scale_x, 
+	float scale_y, 
+	float rotation
+);
 ```
 
 The function to render text to the screen.
 ```c
-void nx_render_text(nxContext* ctx, TTF_Font* font, const char* text, nxColor color, int x, int y, float scale_x, float scale_y);
+void nx_render_text(
+	nxContext* ctx, 
+	TTF_Font* font, 
+	const char* text, 
+	nxColor color, 
+	int x, 
+	int y, 
+	float scale_x, 
+	float scale_y
+);
 ```
 
 The function to render a filled rectangle shape to the screen.
@@ -329,5 +362,13 @@ void nx_clear_screen(nxContext* ctx, nxColor color);
 
 The function to create a new animation.
 ```c
-nxAnimation* nx_create_animation(nxTexture2D texture, int frame_width, int frame_height, int num_frames, float frame_time, int start_frame, int end_frame);
+nxAnimation* nx_create_animation(
+	nxTexture2D texture, 
+	int frame_width, 
+	int frame_height, 
+	int num_frames, 
+	float frame_time, 
+	int start_frame, 
+	int end_frame
+);
 ```
