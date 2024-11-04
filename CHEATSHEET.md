@@ -94,6 +94,7 @@ All the preset colors available for use.
 ```
 
 # STRUCTS
+## nxContext
 The struct for the user to access the low level renderer.
 ```c
 typedef struct {			
@@ -110,6 +111,7 @@ typedef struct {
 } nxTexture2D;
 ```
 
+## nxColor
 The struct to make a rgba color.
 ```c
 typedef struct {
@@ -120,6 +122,7 @@ typedef struct {
 } nxColor;
 ```
 
+## nxRectangle
 The struct to make a simple rectangle shape.
 ```c
 typedef struct {
@@ -130,6 +133,7 @@ typedef struct {
 } nxRectangle;
 ```
 
+## nxAnimation
 The struct to make an animation.
 ```c
 typedef struct {
@@ -146,6 +150,7 @@ typedef struct {
 ```
 
 # ENUMS
+## nxKeys
 The keys you can use in a program.
 ```c
 typedef enum {
@@ -185,6 +190,7 @@ typedef enum {
 } nxKeys;
 ```
 
+## nxMouseButtons
 The mouse buttons you can use in a program.
 ```c
 typedef enum {
@@ -198,6 +204,7 @@ typedef enum {
 ```
 
 # FUNCTIONS
+## nx_start
 The function that creates your nexa app.
 You pass in your on_run, update, and render functions and you title, width and height of the window, and whether or not you want to window to be resizable or not.
 ```c
@@ -212,76 +219,91 @@ void nx_start(
 );
 ```
 
+## nx_get_mouse_position
 A simple fucntion to get the position of the mouse.
 ```c
 void nx_get_mouse_position(int* x, int* y);
 ```
 
+## nx_load_texture
 The function needed to load a texture to use.
 ```c
 nxTexture2D nx_load_texture(const char *file_path);
 ```
 
+## nx_load_font
 The function need to load a font to use.
 ```c
 TTF_Font* nx_load_font(const char* font_path, int font_size);
 ```
 
+## nx_is_key_down
 A check to see if a key is held down.
 ```c
 bool nx_is_key_down(nxKeys key);
 ```
 
+## nx_is_key_pressed
 A check to see if a key is pressed.
 ```c
 bool nx_is_key_pressed(nxKeys key);
 ```
 
+## nx_is_mouse_button_down
 A check to see if a mouse button is held down.
 ```c
 bool nx_is_mouse_button_down(nxMouseButtons button);
 ```
 
+## nx_is_mouse_button_pressed
 A check to see if a mouse button is pressed.
 ```c
 bool nx_is_mouse_button_pressed(nxMouseButtons button);
 ```
 
+## nx_check_collision_rect
 A check to see if 2 rectangles collided with eachother
 ```c
 bool nx_check_collision_rect(nxRectangle rect1, nxRectangle rect2);
 ```
 
+## nx_play_audio
 The function to play a audio file.
 ```c
 void nx_play_audio(const char* sound);
 ```
 
+## nx_play_audio_looped
 The function to play a audio file looped.
 ```c
 void nx_play_audio_looped(const char* sound);
 ```
 
+## nx_play_music_looped
 The function to play music. (Basically just any longer sound file played over and over again)
 ```c
 void nx_play_music_looped(const char* music);
 ```
 
+## nx_stop_music
 The function to stop any music playing.
 ```c
 void nx_stop_music();
 ```
 
+## nx_stop_audio
 The function to stop any audio playing
 ```c
 void nx_stop_audio();
 ```
 
+## nx_update_animation
 The function need to play an animation.
 ```c
 void nx_update_animation(nxAnimation* anim, float dt, bool looped);
 ```
 
+## nx_render_animation
 The function to render an animation to the screen.
 ```c
 void nx_render_animation(
@@ -295,6 +317,7 @@ void nx_render_animation(
 );
 ```
 
+## nx_render_texture
 The function to render a texture to the screen.
 ```c
 void nx_render_texture(
@@ -308,6 +331,7 @@ void nx_render_texture(
 );
 ```
 
+## nx_render_text
 The function to render text to the screen.
 ```c
 void nx_render_text(
@@ -322,36 +346,43 @@ void nx_render_text(
 );
 ```
 
+## nx_render_rect_filled
 The function to render a filled rectangle shape to the screen.
 ```c
 void nx_render_rect_filled(nxContext* ctx, int x, int y, int width, int height, nxColor color);
 ```
 
+## nx_render_rect_line
 The function to render an outline of a rectangle shape to the screen.
 ```c
 void nx_render_rect_line(nxContext* ctx, int x, int y, int width, int height, nxColor color);
 ```
 
+## nx_render_circle_filled
 The function to render a filled circle shape to the screen.
 ```c
 void nx_render_circle_filled(nxContext* ctx, int center_x, int center_y, int radius, nxColor color);
 ```
 
+## nx_render_circle_line
 The function to render an outline of a circle shape to the screen.
 ```c
 void nx_render_circle_line(nxContext* ctx, int center_x, int center_y, int radius, nxColor color);
 ```
 
+## nx_render_line
 The function to render a line to the screen.
 ```c
 void nx_render_line(nxContext* ctx, int x1, int y1, int x2, int y2);
 ```
 
+## nx_clear_screen
 The function to clear the screen every frame to a certain color.
 ```c
 void nx_clear_screen(nxContext* ctx, nxColor color);
 ```
 
+## nx_create_animation
 The function to create a new animation.
 ```c
 nxAnimation* nx_create_animation(
