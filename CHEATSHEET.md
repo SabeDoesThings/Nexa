@@ -1,6 +1,8 @@
 # WELCOME
 Hello! This is a simple cheatsheet of all the functinality of Nexa. This will go over all the functions, structs, enums, etc and give a short explanation of how they work. Enjoy :)
 
+# DEFINES
+## Colors
 All the preset colors available for use.
 ```c
 #define nxWHITE             (nxColor){ 255, 255, 255, 255 }    // White
