@@ -250,7 +250,7 @@ void nx_render_circle_filled(nxContext* ctx, int center_x, int center_y, int rad
 void nx_render_line(nxContext* ctx, int x1, int y1, int x2, int y2);
 void nx_clear_screen(nxContext* ctx, nxColor color);
 nxAnimation* nx_create_animation(nxTexture2D texture, int frame_width, int frame_height, int num_frames, float frame_time, int start_frame, int end_frame);
-float getAngle(int x1, int y1, int x2, int y2);
+float nx_get_rotation(int x1, int y1, int x2, int y2);
 
 // ██ ███    ███ ██████  ██      ███████ ███    ███ ███████ ███    ██ ████████  █████  ████████ ██  ██████  ███    ██
 // ██ ████  ████ ██   ██ ██      ██      ████  ████ ██      ████   ██    ██    ██   ██    ██    ██ ██    ██ ████   ██
@@ -697,7 +697,7 @@ void nx_clear_screen(nxContext* ctx, nxColor color) {
     SDL_RenderClear(ctx->renderer);
 }
 
-float get_rotation(int x1, int y1, int x2, int y2) {
+float nx_get_rotation(int x1, int y1, int x2, int y2) {
     float rotation = -90 + atan2(y1 - y2, x1 - x2) * (180 / PI);
 
     return rotation >= 0 ? rotation : 360 + rotation;
