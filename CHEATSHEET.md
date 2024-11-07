@@ -395,3 +395,9 @@ nxAnimation* nx_create_animation(
 	int end_frame
 );
 ```
+
+## nx_get_rotation
+The function to get the rotation between two points
+```c
+float nx_get_rotation(int x1, int y1, int x2, int y2);
+```
