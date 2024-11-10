@@ -120,6 +120,7 @@
 // >>structs
 typedef struct {
     SDL_Renderer* renderer;
+    int cam_x, cam_y;
 } nxContext;
 
 typedef struct {
@@ -153,6 +154,11 @@ typedef struct {
     int start_frame;
     int end_frame;
 } nxAnimation;
+
+typedef struct {
+    int x, y;
+    float zoom;
+} nxCamera2D;
 
 // ███████ ███    ██ ██    ██ ███    ███ ███████ 
 // ██      ████   ██ ██    ██ ████  ████ ██      
@@ -217,9 +223,9 @@ SDL_Window* nx_create_window(const char* title, int width, int height);
 SDL_Renderer* nx_create_renderer(SDL_Window* window);
 bool nx_process_events();
 void nx_start(
-    void (*on_run)(), 
-    void (*update)(float), 
-    void (*render)(nxContext*), 
+    void (*init)(),
+    void (*update)(float),
+    void (*render)(nxContext*),
     const char* title,
     int width,
     int height,
@@ -238,11 +244,11 @@ void nx_play_music_looped(const char* music);
 void nx_play_audio_looped(const char* sound);
 void nx_stop_music();
 void nx_stop_audio();
-void nx_update_animation(nxAnimation* anim, float dt, bool looped);
-void nx_render_animation(nxContext* ctx, nxAnimation* anim, int dest_x, int dest_y, float scale_x, float scale_y, float rotation);
-void nx_render_texture(nxContext* ctx, nxTexture2D* tex, int tex_x, int tex_y, float scale_x, float scale_y, float rotation);
+void nx_run_animation(nxAnimation* anim, float dt, bool looped);
+void nx_render_animation(nxContext* ctx, nxAnimation* anim, int dest_x, int dest_y, float rotation);
+void nx_render_texture(nxContext* ctx, nxTexture2D* tex, int tex_x, int tex_y, float rotation);
 SDL_Color nx_convert_color(nxColor color);
-void nx_render_text(nxContext* ctx, TTF_Font* font, const char* text, nxColor color, int x, int y, float scale_x, float scale_y);
+void nx_render_text(nxContext* ctx, TTF_Font* font, const char* text, nxColor color, int x, int y);
 void nx_render_rect_filled(nxContext* ctx, int x, int y, int width, int height, nxColor color);
 void nx_render_rect_line(nxContext* ctx, int x, int y, int width, int height, nxColor color);
 void nx_render_circle_line(nxContext* ctx, int center_x, int center_y, int radius, nxColor color);
@@ -251,6 +257,8 @@ void nx_render_line(nxContext* ctx, int x1, int y1, int x2, int y2);
 void nx_clear_screen(nxContext* ctx, nxColor color);
 nxAnimation* nx_create_animation(nxTexture2D texture, int frame_width, int frame_height, int num_frames, float frame_time, int start_frame, int end_frame);
 float nx_get_rotation(int x1, int y1, int x2, int y2);
+void nx_apply_camera(nxContext* ctx, nxCamera2D* cam);
+void nx_camera_follow(nxCamera2D* cam, int target_x, int target_y);
 
 // ██ ███    ███ ██████  ██      ███████ ███    ███ ███████ ███    ██ ████████  █████  ████████ ██  ██████  ███    ██
 // ██ ████  ████ ██   ██ ██      ██      ████  ████ ██      ████   ██    ██    ██   ██    ██    ██ ██    ██ ████   ██
@@ -317,7 +325,7 @@ bool nx_process_events() {
 }
 
 void nx_start(
-    void (*on_run)(), 
+    void (*init)(), 
     void (*update)(float), 
     void (*render)(nxContext*), 
     const char* title,
@@ -333,7 +341,7 @@ void nx_start(
 
     nxContext ctx = (nxContext){renderer};
 
-    on_run();
+    init();
 
     bool running = true;
     Uint64 last_time = SDL_GetTicks();
@@ -508,7 +516,7 @@ nxAnimation* nx_create_animation(nxTexture2D texture, int frame_width, int frame
     return animation;
 }
 
-void nx_update_animation(nxAnimation* anim, float dt, bool looped) {
+void nx_run_animation(nxAnimation* anim, float dt, bool looped) {
     anim->elapsed_time += dt;
 
     if (anim->elapsed_time >= anim->frame_time) {
@@ -527,29 +535,25 @@ void nx_update_animation(nxAnimation* anim, float dt, bool looped) {
     }
 }
 
-void nx_render_animation(nxContext* ctx, nxAnimation* anim, int dest_x, int dest_y, float scale_x, float scale_y, float rotation) {
+void nx_render_animation(nxContext* ctx, nxAnimation* anim, int dest_x, int dest_y, float rotation) {
     SDL_Texture* tex = SDL_CreateTextureFromSurface(ctx->renderer, anim->texture.surface);
     if (!tex) {
         fprintf(stderr, "Failed to create texture! ERROR: %s\n", SDL_GetError());
         return;
     }
 
-    int src_x = (anim->current_frame - 1) * anim->frame_width; // Correct index calculation
+    int src_x = (anim->current_frame - 1) * anim->frame_width;
     SDL_Rect src_rect = { src_x, 0, anim->frame_width, anim->frame_height };
 
-    int scaled_width = (int)(anim->frame_width * scale_x);
-    int scaled_height = (int)(anim->frame_height * scale_y);
+    SDL_Rect dst_rect = { dest_x - ctx->cam_x, dest_y - ctx->cam_y, anim->frame_width, anim->frame_height };
+    SDL_Point center = { anim->frame_width / 2, anim->frame_height / 2 };
 
-    SDL_Rect dst_rect = { dest_x, dest_y, scaled_width, scaled_height };
-    SDL_Point center = { scaled_width / 2, scaled_height / 2 };  // Rotation center at the center of the frame
-
-    // Use SDL_RenderCopyEx to apply rotation
     SDL_RenderCopyEx(ctx->renderer, tex, &src_rect, &dst_rect, rotation, &center, SDL_FLIP_NONE);
 
     SDL_DestroyTexture(tex);
 }
 
-void nx_render_texture(nxContext* ctx, nxTexture2D* tex, int tex_x, int tex_y, float scale_x, float scale_y, float rotation) {
+void nx_render_texture(nxContext* ctx, nxTexture2D* tex, int tex_x, int tex_y, float rotation) {
     SDL_Texture* texture = SDL_CreateTextureFromSurface(ctx->renderer, tex->surface);
 
     int width = 0, height = 0;
@@ -558,23 +562,12 @@ void nx_render_texture(nxContext* ctx, nxTexture2D* tex, int tex_x, int tex_y, f
         return;
     }
 
-    int scaled_width = (int)(width * scale_x);
-    int scaled_height = (int)(height * scale_y);
-
-    SDL_Rect dst = {tex_x, tex_y, scaled_width, scaled_height};
-    SDL_Point center = {scaled_width / 2, scaled_height / 2};
+    SDL_Rect dst = {tex_x - ctx->cam_x, tex_y - ctx->cam_y, width, height};
+    SDL_Point center = {width / 2, height / 2};
 
     SDL_RenderCopyEx(ctx->renderer, texture, NULL, &dst, rotation, &center, SDL_FLIP_NONE);
 
     SDL_DestroyTexture(texture);
-}
-
-void nx_set_texture_width(nxTexture2D* tex, int new_width) {
-    tex->width = new_width;
-}
-
-void nx_set_texture_height(nxTexture2D* tex, int new_height) {
-    tex->height = new_height;
 }
 
 SDL_Color nx_convert_color(nxColor color) {
@@ -582,7 +575,7 @@ SDL_Color nx_convert_color(nxColor color) {
     return sdl_color;
 }
 
-void nx_render_text(nxContext* ctx, TTF_Font* font, const char* text, nxColor color, int x, int y, float scale_x, float scale_y) {
+void nx_render_text(nxContext* ctx, TTF_Font* font, const char* text, nxColor color, int x, int y) {
     SDL_Color sdl_color = nx_convert_color(color);
 
     SDL_Surface* surface = TTF_RenderText_Solid(font, text, sdl_color);
@@ -601,10 +594,10 @@ void nx_render_text(nxContext* ctx, TTF_Font* font, const char* text, nxColor co
     int w = 0, h = 0;
     SDL_QueryTexture(texture, NULL, NULL, &w, &h);
 
-    int scaled_x = (int)(x * scale_x);
-    int scaled_y = (int)(y * scale_y);
-    int scaled_width = (int)(w * scale_x);
-    int scaled_height = (int)(h * scale_y);
+    int scaled_x = x - ctx->cam_x;
+    int scaled_y = y - ctx->cam_y;
+    int scaled_width = w;
+    int scaled_height = h;
 
     SDL_Rect dest_rect = {scaled_x, scaled_y, scaled_width, scaled_height};
     SDL_RenderCopy(ctx->renderer, texture, NULL, &dest_rect);
@@ -615,13 +608,13 @@ void nx_render_text(nxContext* ctx, TTF_Font* font, const char* text, nxColor co
 
 void nx_render_rect_filled(nxContext* ctx, int x, int y, int width, int height, nxColor color) {
     SDL_SetRenderDrawColor(ctx->renderer, color.r, color.g, color.b, color.a);
-    SDL_Rect rect = {x, y, width, height};
+    SDL_Rect rect = {x - ctx->cam_x, y - ctx->cam_y, width, height};
     SDL_RenderFillRect(ctx->renderer, &rect);
 }
 
 void nx_render_rect_line(nxContext* ctx, int x, int y, int width, int height, nxColor color) {
     SDL_SetRenderDrawColor(ctx->renderer, color.r, color.g, color.b, color.a);
-    SDL_Rect rect = {x, y, width, height};
+    SDL_Rect rect = {x - ctx->cam_x, y - ctx->cam_y, width, height};
     SDL_RenderDrawRect(ctx->renderer, &rect);
 }
 
@@ -634,6 +627,8 @@ void nx_render_circle_line(nxContext* ctx, int center_x, int center_y, int radiu
     int error = tx - diameter;
 
     SDL_SetRenderDrawColor(ctx->renderer, color.r, color.g, color.b, color.a);
+    center_x -= ctx->cam_x;
+    center_y -= ctx->cam_y;
     while (x >= y) {
         SDL_RenderDrawPoint(ctx->renderer, center_x + x, center_y - y);
         SDL_RenderDrawPoint(ctx->renderer, center_x + x, center_y + y);
@@ -667,6 +662,8 @@ void nx_render_circle_filled(nxContext* ctx, int center_x, int center_y, int rad
     int error = tx - diameter;
 
     SDL_SetRenderDrawColor(ctx->renderer, color.r, color.g, color.b, color.a);
+    center_x -= ctx->cam_x;
+    center_y -= ctx->cam_y;
     while (x >= y) {
         SDL_RenderDrawLine(ctx->renderer, center_x - x, center_y - y, center_x + x, center_y - y);
         SDL_RenderDrawLine(ctx->renderer, center_x - x, center_y + y, center_x + x, center_y + y);
@@ -688,8 +685,7 @@ void nx_render_circle_filled(nxContext* ctx, int center_x, int center_y, int rad
 }
 
 void nx_render_line(nxContext* ctx, int x1, int y1, int x2, int y2) {
-    SDL_RenderDrawLine(ctx->renderer, (int)(x1), (int)(y1), 
-                       (int)(x2), (int)(y2));
+    SDL_RenderDrawLine(ctx->renderer, x1 - ctx->cam_x, y1 - ctx->cam_y, x2 - ctx->cam_x, y2 - ctx->cam_y);
 }
 
 void nx_clear_screen(nxContext* ctx, nxColor color) {
@@ -701,6 +697,18 @@ float nx_get_rotation(int x1, int y1, int x2, int y2) {
     float rotation = -90 + atan2(y1 - y2, x1 - x2) * (180 / PI);
 
     return rotation >= 0 ? rotation : 360 + rotation;
+}
+
+void nx_apply_camera(nxContext* ctx, nxCamera2D* cam) {
+    ctx->cam_x = cam->x;
+    ctx->cam_y = cam->y;
+
+    SDL_RenderSetScale(ctx->renderer, cam->zoom, cam->zoom);
+}
+
+void nx_camera_follow(nxCamera2D* cam, int target_x, int target_y) {
+    cam->x = target_x;
+    cam->y = target_y;
 }
 
 #endif // NEXA_IMPLEMENTATION
