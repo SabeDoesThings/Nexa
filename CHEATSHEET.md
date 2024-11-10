@@ -97,7 +97,7 @@ All the preset colors available for use.
 ## nxContext
 The struct for the user to access the low level renderer.
 ```c
-typedef struct {			
+typedef struct {            
     SDL_Renderer* renderer; // A variable to access the underlying renderer
 } nxContext;
 ```
@@ -147,6 +147,15 @@ typedef struct {
     int start_frame;         // The starting frame of the animation
     int end_frame;           // The frame to stop on before looping back
 } nxAnimation;
+```
+
+## nxCamera2D
+The struct for a 2d camera.
+```c
+typedef struct {
+    int x, y;         // x and y position
+    float zoom;       // zoom amount
+} nxCamera2D;
 ```
 
 # ENUMS
@@ -209,13 +218,13 @@ The function that creates your nexa app.
 You pass in your on_run, update, and render functions and you title, width and height of the window, and whether or not you want to window to be resizable or not.
 ```c
 void nx_start(
-	void (*on_run)(), 
-	void (*update)(float), 
-	void (*render)(nxContext*), 
-	const char* title, 
-	int width, 
-	int height, 
-	bool resizable
+    void (*on_run)(), 
+    void (*update)(float), 
+    void (*render)(nxContext*), 
+    const char* title, 
+    int width, 
+    int height, 
+    bool resizable
 );
 ```
 
@@ -307,13 +316,13 @@ void nx_update_animation(nxAnimation* anim, float dt, bool looped);
 The function to render an animation to the screen.
 ```c
 void nx_render_animation(
-	nxContext* ctx, 
-	nxAnimation* anim, 
-	int dest_x, 
-	int dest_y, 
-	float scale_x, 
-	float scale_y, 
-	float rotation
+    nxContext* ctx, 
+    nxAnimation* anim, 
+    int dest_x, 
+    int dest_y, 
+    float scale_x, 
+    float scale_y, 
+    float rotation
 );
 ```
 
@@ -321,13 +330,13 @@ void nx_render_animation(
 The function to render a texture to the screen.
 ```c
 void nx_render_texture(
-	nxContext* ctx, 
-	nxTexture2D* tex, 
-	int tex_x, 
-	int tex_y, 
-	float scale_x, 
-	float scale_y, 
-	float rotation
+    nxContext* ctx, 
+    nxTexture2D* tex, 
+    int tex_x, 
+    int tex_y, 
+    float scale_x, 
+    float scale_y, 
+    float rotation
 );
 ```
 
@@ -335,14 +344,14 @@ void nx_render_texture(
 The function to render text to the screen.
 ```c
 void nx_render_text(
-	nxContext* ctx, 
-	TTF_Font* font, 
-	const char* text, 
-	nxColor color, 
-	int x, 
-	int y, 
-	float scale_x, 
-	float scale_y
+    nxContext* ctx, 
+    TTF_Font* font, 
+    const char* text, 
+    nxColor color, 
+    int x, 
+    int y, 
+    float scale_x, 
+    float scale_y
 );
 ```
 
@@ -386,18 +395,30 @@ void nx_clear_screen(nxContext* ctx, nxColor color);
 The function to create a new animation.
 ```c
 nxAnimation* nx_create_animation(
-	nxTexture2D texture, 
-	int frame_width, 
-	int frame_height, 
-	int num_frames, 
-	float frame_time, 
-	int start_frame, 
-	int end_frame
+    nxTexture2D texture, 
+    int frame_width, 
+    int frame_height, 
+    int num_frames, 
+    float frame_time, 
+    int start_frame, 
+    int end_frame
 );
 ```
 
 ## nx_get_rotation
-The function to get the rotation between two points
+The function to get the rotation between two points.
 ```c
 float nx_get_rotation(int x1, int y1, int x2, int y2);
+```
+
+## nx_apply_camera
+The function to apply the camera to the application.
+```c
+void nx_apply_camera(nxContext* ctx, nxCamera2D* cam);
+```
+
+## nx_camera_follow
+The function to make the camera follow an object.
+```c
+void nx_camera_follow(nxCamera2D* cam, int target_x, int target_y);
 ```
