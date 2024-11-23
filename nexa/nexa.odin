@@ -470,7 +470,6 @@ run_animation :: proc(anim: ^Animation, dt: f32, looped: bool) {
 
     if anim.elapsed_time >= anim.frame_time {
         anim.elapsed_time -= anim.frame_time;
-        anim.current_frame += 1;
 
         if looped {
             if anim.current_frame > anim.end_frame {
@@ -482,6 +481,8 @@ run_animation :: proc(anim: ^Animation, dt: f32, looped: bool) {
                 anim.current_frame = anim.end_frame;
             }
         }
+
+        anim.current_frame += 1;
     }
 }
 
