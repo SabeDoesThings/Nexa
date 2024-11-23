@@ -16,6 +16,8 @@ anim: ^nx.Animation;
 cam: nx.Camera2D;
 
 init :: proc() {
+	nx.play_music_looped("./res/music.wav");
+
 	square_tex := nx.load_texture("./res/newnexa.png");
 	square.tex = square_tex;
 	square.x = f32(WINDOW_WIDTH / 2) - f32(square.tex.width / 2);
@@ -63,22 +65,22 @@ update :: proc(dt: f32) {
 	fmt.println(square.x, square.y);
 }
 
-render :: proc(ctx: ^nx.Context) {
-	nx.clear_screen(ctx, nx.CORNFLOWERBLUE);
+render :: proc() {
+	nx.clear_screen(nx.CORNFLOWERBLUE);
 
-	nx.apply_camera(ctx, &cam);
+	nx.apply_camera(&cam);
 
-	nx.render_texture(ctx, &square.tex, i32(square.x), i32(square.y), 0.0, false);
+	nx.render_texture(&square.tex, i32(square.x), i32(square.y), 0.0, false);
 
-	nx.render_rect_line(ctx, 300, 60, 64, 64, nx.RED);
-    nx.render_rect_filled(ctx, 300, 400, 64, 64, nx.WHITE);
+	nx.render_rect_line(300, 60, 64, 64, nx.RED);
+    nx.render_rect_filled(300, 400, 64, 64, nx.WHITE);
 
-    nx.render_circle_line(ctx, 320, 240, 100, nx.GREEN);
-    nx.render_circle_filled(ctx, 320, 600, 100, nx.YELLOW);
+    nx.render_circle_line(320, 240, 100, nx.GREEN);
+    nx.render_circle_filled(320, 600, 100, nx.YELLOW);
 
-    nx.render_text(ctx, nx.load_font("./res/arial.ttf", 50), "Hello World!", nx.BLACK, 0, 0);
+    nx.render_text(nx.load_font("./res/arial.ttf", 50), "Hello World!", nx.BLACK, 0, 0);
 
-    nx.render_animation(ctx, anim, 100, 100, 0.0, false);
+    nx.render_animation(anim, 100, 100, 0.0, false);
 }
 
 main :: proc() {
