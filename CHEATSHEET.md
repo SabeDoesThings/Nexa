@@ -204,7 +204,7 @@ You pass in your init, update, and render functions and you title, width and hei
 game :: proc(
     init: proc(),
     update: proc(dt: f32),
-    render: proc(ctx: ^Context),
+    render: proc(),
     title: cstring = "Nexa Project",
     width: i32 = 1280, 
     height: i32 = 720,
@@ -311,7 +311,6 @@ run_animation :: proc(anim: ^Animation, dt: f32, looped: bool)
 The function to render an animation to the screen.
 ```go
 render_animation :: proc(
-    ctx: ^Context, 
     anim: ^Animation, 
     dest_x, dest_y: i32, 
     rotation: f32, 
@@ -323,7 +322,6 @@ render_animation :: proc(
 The function to render a texture to the screen.
 ```go
 render_texture :: proc(
-    ctx: ^Context, 
     tex: ^Texture2D, 
     tex_x, tex_y: i32, 
     rotation: f32, 
@@ -335,7 +333,6 @@ render_texture :: proc(
 The function to render text to the screen.
 ```go
 render_text :: proc(
-    ctx: ^Context, 
     font: ^TTF.Font, 
     text: cstring, 
     color: Color, 
@@ -346,37 +343,37 @@ render_text :: proc(
 ## render_rect_filled
 The function to render a filled rectangle shape to the screen.
 ```go
-render_rect_filled :: proc(ctx: ^Context, x, y, width, height: i32, color: Color)
+render_rect_filled :: proc(x, y, width, height: i32, color: Color)
 ```
 
 ## render_rect_line
 The function to render an outline of a rectangle shape to the screen.
 ```go
-render_rect_line :: proc(ctx: ^Context, x, y, width, height: i32, color: Color)
+render_rect_line :: proc(x, y, width, height: i32, color: Color)
 ```
 
 ## render_circle_filled
 The function to render a filled circle shape to the screen.
 ```go
-render_circle_filled :: proc(ctx: ^Context, center_x, center_y, radius: i32, color: Color)
+render_circle_filled :: proc(center_x, center_y, radius: i32, color: Color)
 ```
 
 ## render_circle_line
 The function to render an outline of a circle shape to the screen.
 ```go
-render_circle_line :: proc(ctx: ^Context, center_x, center_y, radius: i32, color: Color)
+render_circle_line :: proc(center_x, center_y, radius: i32, color: Color)
 ```
 
 ## render_line
 The function to render a line to the screen.
 ```go
-render_line :: proc(ctx: ^Context, x1, y1, x2, y2: i32, color: Color)
+render_line :: proc(x1, y1, x2, y2: i32, color: Color)
 ```
 
 ## clear_screen
 The function to clear the screen every frame to a certain color.
 ```go
-clear_screen :: proc(ctx: ^Context, color: Color)
+clear_screen :: proc(color: Color)
 ```
 
 ## get_rotation
@@ -388,7 +385,7 @@ get_rotation :: proc(x1, y1, x2, y2: i32) -> f32
 ## apply_camera
 The function to apply the camera to the application.
 ```go
-apply_camera :: proc(ctx: ^Context, cam: ^Camera2D)
+apply_camera :: proc(cam: ^Camera2D)
 ```
 
 ## camera_follow
