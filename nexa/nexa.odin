@@ -16,7 +16,9 @@ import mem "core:mem";
 //  ██████  ██████  ██   ████ ███████    ██    ██   ██ ██   ████    ██    ███████
 //
 // >>constants
+@(private="file")
 MAX_KEYS :: 256
+@(private="file")
 MAX_BUTTONS :: 5
 
 // Color Definitions
@@ -111,6 +113,7 @@ CORNFLOWERBLUE : Color : { 100, 149, 237, 255 };    // Cornflower Blue
 // ███████    ██    ██   ██  ██████   ██████    ██    ███████  
 //
 // >>structs
+@(private="file")
 Context :: struct {
 	renderer: ^SDL.Renderer,
 	cam_x, cam_y: i32,
@@ -204,9 +207,12 @@ MouseButtons :: enum {
 // ██       ██████  ██   ████  ██████    ██    ██  ██████  ██   ████ ███████ 
 //                                                                          
 // >>functions
+@(private="file")
 previous_key_states: [MAX_KEYS]u32;
+@(private="file")
 previous_mouse_button_states: [MAX_BUTTONS]u32;
 
+@(private="file")
 g_ctx: Context;
 
 nx_init :: proc() -> bool {
@@ -238,6 +244,7 @@ nx_init :: proc() -> bool {
     return true;
 }
 
+@(private="file")
 create_window :: proc(title: cstring, width, height: i32) -> ^SDL.Window {
     window := SDL.CreateWindow(title, SDL.WINDOWPOS_CENTERED, SDL.WINDOWPOS_CENTERED, width, height, SDL.WINDOW_SHOWN);
     if window == nil {
@@ -247,6 +254,7 @@ create_window :: proc(title: cstring, width, height: i32) -> ^SDL.Window {
     return window;
 }
 
+@(private="file")
 create_renderer :: proc(window: ^SDL.Window) -> ^SDL.Renderer {
     renderer := SDL.CreateRenderer(window, -1, SDL.RENDERER_ACCELERATED | SDL.RENDERER_PRESENTVSYNC);
     if (renderer == nil) {
@@ -256,6 +264,7 @@ create_renderer :: proc(window: ^SDL.Window) -> ^SDL.Renderer {
     return renderer;
 }
 
+@(private="file")
 process_events :: proc() -> bool {
     event: SDL.Event;
     SDL.PollEvent(&event);
@@ -529,6 +538,7 @@ render_texture :: proc(tex: ^Texture2D, tex_x, tex_y: i32, rotation: f32, flip: 
     SDL.DestroyTexture(texture);
 }
 
+@(private="file")
 convert_color :: proc(color: Color) -> SDL.Color {
     sdl_color: SDL.Color = {color.r, color.g, color.b, color.a};
     return sdl_color;
