@@ -73,14 +73,14 @@ render :: proc() {
 	nx.render_texture(&square.tex, i32(square.x), i32(square.y), 0.0, false);
 
 	nx.render_rect_line(300, 60, 64, 64, nx.RED);
-    nx.render_rect_filled(300, 400, 64, 64, nx.WHITE);
+	nx.render_rect_filled(300, 400, 64, 64, nx.WHITE);
 
-    nx.render_circle_line(320, 240, 100, nx.GREEN);
-    nx.render_circle_filled(320, 600, 100, nx.YELLOW);
+	nx.render_circle_line(320, 240, 100, nx.GREEN);
+	nx.render_circle_filled(320, 600, 100, nx.YELLOW);
 
-    nx.render_text(nx.load_font("./res/arial.ttf", 50), "Hello World!", nx.BLACK, 0, 0);
+	nx.render_text(nx.load_font("./res/arial.ttf", 50), "Hello World!", nx.BLACK, 0, 0);
 
-    nx.render_animation(anim, 100, 100, 0.0, false);
+	nx.render_animation(anim, 100, 100, 0.0, false);
 }
 
 main :: proc() {
