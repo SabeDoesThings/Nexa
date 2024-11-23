@@ -91,15 +91,6 @@ CORNFLOWERBLUE : Color : { 100, 149, 237, 255 };    // Cornflower Blue
 ```
 
 # STRUCTS
-## Context
-The struct for the user to access the low level renderer.
-```go
-Context :: struct {
-    renderer: ^SDL.Renderer, // The low level SDL renderer
-    cam_x, cam_y: i32,       // The low level access to the camera x and y
-}
-```
-
 ## Texure2D
 The struct for a 2D texture.
 ```go

@@ -207,6 +207,8 @@ MouseButtons :: enum {
 previous_key_states: [MAX_KEYS]u32;
 previous_mouse_button_states: [MAX_BUTTONS]u32;
 
+g_ctx: Context;
+
 nx_init :: proc() -> bool {
     if SDL.Init(SDL.INIT_EVERYTHING) < 0 {
         fmt.printf("SDL: failed to initialize, error: %s\n", SDL.GetError());
@@ -223,7 +225,7 @@ nx_init :: proc() -> bool {
         return false;
     }
 
-    if Mix.OpenAudio(44100, Mix.DEFAULT_FORMAT, 2, 2048) < 0 {
+    if Mix.OpenAudio(44100, Mix.DEFAULT_FORMAT, 2, 4096) == -1 {
         fmt.printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", SDL.GetError());
         return false;
     }
@@ -267,7 +269,7 @@ process_events :: proc() -> bool {
 game :: proc(
     init: proc(),
     update: proc(dt: f32),
-    render: proc(ctx: ^Context),
+    render: proc(),
     title: cstring = "Nexa Project",
     width: i32 = 1280, 
     height: i32 = 720,
@@ -279,7 +281,7 @@ game :: proc(
 
     SDL.SetWindowResizable(window, SDL.bool(resizable));
 
-    ctx: Context = {renderer, 0, 0};
+    g_ctx = {renderer, 0, 0};
 
     init();
 
@@ -295,13 +297,13 @@ game :: proc(
 
         update(dt);
 
-        render(&ctx);
+        render();
 
-        SDL.RenderPresent(ctx.renderer);
+        SDL.RenderPresent(g_ctx.renderer);
     }
 
     SDL.DestroyWindow(window);
-    SDL.DestroyRenderer(ctx.renderer);
+    SDL.DestroyRenderer(g_ctx.renderer);
     Mix.HaltMusic();
     Mix.HaltChannel(-1);
     Mix.CloseAudio();
@@ -403,7 +405,7 @@ play_audio :: proc(sound: cstring) {
 }
 
 play_music_looped :: proc(music: cstring) {
-    bgm := Mix.LoadMUS(music);
+    bgm: ^Mix.Music = Mix.LoadMUS(music);
     if bgm == nil {
         fmt.printf("Failed to load music: %s\n", Mix.GetError());
         return;
@@ -474,8 +476,8 @@ run_animation :: proc(anim: ^Animation, dt: f32, looped: bool) {
     }
 }
 
-render_animation :: proc(ctx: ^Context, anim: ^Animation, dest_x, dest_y: i32, rotation: f32, flip: bool) {
-    tex := SDL.CreateTextureFromSurface(ctx.renderer, anim.texture.t_surface);
+render_animation :: proc(anim: ^Animation, dest_x, dest_y: i32, rotation: f32, flip: bool) {
+    tex := SDL.CreateTextureFromSurface(g_ctx.renderer, anim.texture.t_surface);
     if tex == nil {
         fmt.printf("Failed to create texture! ERROR: %s\n", SDL.GetError());
         return;
@@ -484,7 +486,7 @@ render_animation :: proc(ctx: ^Context, anim: ^Animation, dest_x, dest_y: i32, r
     src_x := (anim.current_frame - 1) * anim.frame_width;
     src_rect: SDL.Rect = SDL.Rect{x = src_x, y = 0, w = anim.frame_width, h = anim.frame_height};
 
-    dst_rect: SDL.Rect = SDL.Rect{x = dest_x - ctx.cam_x, y = dest_y - ctx.cam_y, w = anim.frame_width, h = anim.frame_height};
+    dst_rect: SDL.Rect = SDL.Rect{x = dest_x - g_ctx.cam_x, y = dest_y - g_ctx.cam_y, w = anim.frame_width, h = anim.frame_height};
 
     center: SDL.Point = SDL.Point{x = anim.frame_width / 2, y = anim.frame_height / 2,};
 
@@ -496,13 +498,13 @@ render_animation :: proc(ctx: ^Context, anim: ^Animation, dest_x, dest_y: i32, r
         flip_mode = SDL.RendererFlip.NONE;
     }
 
-    SDL.RenderCopyEx(ctx.renderer, tex, &src_rect, &dst_rect, f64(rotation), &center, flip_mode);
+    SDL.RenderCopyEx(g_ctx.renderer, tex, &src_rect, &dst_rect, f64(rotation), &center, flip_mode);
 
     SDL.DestroyTexture(tex);
 }
 
-render_texture :: proc(ctx: ^Context, tex: ^Texture2D, tex_x, tex_y: i32, rotation: f32, flip: bool) {
-    texture := SDL.CreateTextureFromSurface(ctx.renderer, tex.t_surface);
+render_texture :: proc(tex: ^Texture2D, tex_x, tex_y: i32, rotation: f32, flip: bool) {
+    texture := SDL.CreateTextureFromSurface(g_ctx.renderer, tex.t_surface);
 
     width: i32 = 0;
     height: i32 = 0;
@@ -511,7 +513,7 @@ render_texture :: proc(ctx: ^Context, tex: ^Texture2D, tex_x, tex_y: i32, rotati
         return;
     }
 
-    dst: SDL.Rect = {tex_x - ctx.cam_x, tex_y - ctx.cam_y, width, height};
+    dst: SDL.Rect = {tex_x - g_ctx.cam_x, tex_y - g_ctx.cam_y, width, height};
     center: SDL.Point = {width / 2, height / 2};
 
     flip_mode: SDL.RendererFlip;
@@ -522,7 +524,7 @@ render_texture :: proc(ctx: ^Context, tex: ^Texture2D, tex_x, tex_y: i32, rotati
         flip_mode = SDL.RendererFlip.NONE;
     }
 
-    SDL.RenderCopyEx(ctx.renderer, texture, nil, &dst, f64(rotation), &center, flip_mode);
+    SDL.RenderCopyEx(g_ctx.renderer, texture, nil, &dst, f64(rotation), &center, flip_mode);
 
     SDL.DestroyTexture(texture);
 }
@@ -532,7 +534,7 @@ convert_color :: proc(color: Color) -> SDL.Color {
     return sdl_color;
 }
 
-render_text :: proc(ctx: ^Context, font: ^TTF.Font, text: cstring, color: Color, x, y: i32) {
+render_text :: proc(font: ^TTF.Font, text: cstring, color: Color, x, y: i32) {
     sdl_color := convert_color(color);
 
     surface := TTF.RenderText_Solid(font, text, sdl_color);
@@ -542,7 +544,7 @@ render_text :: proc(ctx: ^Context, font: ^TTF.Font, text: cstring, color: Color,
         return;
     }
 
-    texture := SDL.CreateTextureFromSurface(ctx.renderer, surface);
+    texture := SDL.CreateTextureFromSurface(g_ctx.renderer, surface);
     if texture == nil {
         SDL.FreeSurface(surface);
         fmt.printf("Could not create text texture: %s", SDL.GetError());
@@ -553,31 +555,31 @@ render_text :: proc(ctx: ^Context, font: ^TTF.Font, text: cstring, color: Color,
     h: i32 = 0;
     SDL.QueryTexture(texture, nil, nil, &w, &h);
 
-    scaled_x := x - ctx.cam_x;
-    scaled_y := y - ctx.cam_y;
+    scaled_x := x - g_ctx.cam_x;
+    scaled_y := y - g_ctx.cam_y;
     scaled_width := w;
     scaled_height := h;
 
     dst: SDL.Rect = {scaled_x, scaled_y, scaled_width, scaled_height};
-    SDL.RenderCopy(ctx.renderer, texture, nil, &dst);
+    SDL.RenderCopy(g_ctx.renderer, texture, nil, &dst);
 
     SDL.DestroyTexture(texture);
     SDL.FreeSurface(surface);
 }
 
-render_rect_filled :: proc(ctx: ^Context, x, y, width, height: i32, color: Color) {
-    SDL.SetRenderDrawColor(ctx.renderer, color.r, color.g, color.b, color.a);
-    rect: SDL.Rect = {x - ctx.cam_x, y - ctx.cam_y, width, height};
-    SDL.RenderFillRect(ctx.renderer, &rect);
+render_rect_filled :: proc(x, y, width, height: i32, color: Color) {
+    SDL.SetRenderDrawColor(g_ctx.renderer, color.r, color.g, color.b, color.a);
+    rect: SDL.Rect = {x - g_ctx.cam_x, y - g_ctx.cam_y, width, height};
+    SDL.RenderFillRect(g_ctx.renderer, &rect);
 }
 
-render_rect_line :: proc(ctx: ^Context, x, y, width, height: i32, color: Color) {
-    SDL.SetRenderDrawColor(ctx.renderer, color.r, color.g, color.b, color.a);
-    rect: SDL.Rect = {x - ctx.cam_x, y - ctx.cam_y, width, height};
-    SDL.RenderDrawRect(ctx.renderer, &rect);
+render_rect_line :: proc(x, y, width, height: i32, color: Color) {
+    SDL.SetRenderDrawColor(g_ctx.renderer, color.r, color.g, color.b, color.a);
+    rect: SDL.Rect = {x - g_ctx.cam_x, y - g_ctx.cam_y, width, height};
+    SDL.RenderDrawRect(g_ctx.renderer, &rect);
 }
 
-render_circle_line :: proc(ctx: ^Context, center_x, center_y, radius: i32, color: Color) {
+render_circle_line :: proc(center_x, center_y, radius: i32, color: Color) {
     diameter := radius * 2;
     x: i32 = radius - 1;
     y: i32 = 0;
@@ -585,21 +587,21 @@ render_circle_line :: proc(ctx: ^Context, center_x, center_y, radius: i32, color
     ty: i32 = 1;
     error := tx - diameter;
 
-    SDL.SetRenderDrawColor(ctx.renderer, color.r, color.g, color.b, color.a);
+    SDL.SetRenderDrawColor(g_ctx.renderer, color.r, color.g, color.b, color.a);
     cent_x := center_x;
     cent_y := center_y;
 
-    cent_x -= ctx.cam_x;
-    cent_y -= ctx.cam_y;
+    cent_x -= g_ctx.cam_x;
+    cent_y -= g_ctx.cam_y;
     for x >= y {
-        SDL.RenderDrawPoint(ctx.renderer, cent_x + x, cent_y + y);
-        SDL.RenderDrawPoint(ctx.renderer, cent_x - x, cent_y - y);
-        SDL.RenderDrawPoint(ctx.renderer, cent_x + x, cent_y - y);
-        SDL.RenderDrawPoint(ctx.renderer, cent_x - x, cent_y + y);
-        SDL.RenderDrawPoint(ctx.renderer, cent_x + y, cent_y - x);
-        SDL.RenderDrawPoint(ctx.renderer, cent_x + y, cent_y + x);
-        SDL.RenderDrawPoint(ctx.renderer, cent_x - y, cent_y - x);
-        SDL.RenderDrawPoint(ctx.renderer, cent_x - y, cent_y + x);
+        SDL.RenderDrawPoint(g_ctx.renderer, cent_x + x, cent_y + y);
+        SDL.RenderDrawPoint(g_ctx.renderer, cent_x - x, cent_y - y);
+        SDL.RenderDrawPoint(g_ctx.renderer, cent_x + x, cent_y - y);
+        SDL.RenderDrawPoint(g_ctx.renderer, cent_x - x, cent_y + y);
+        SDL.RenderDrawPoint(g_ctx.renderer, cent_x + y, cent_y - x);
+        SDL.RenderDrawPoint(g_ctx.renderer, cent_x + y, cent_y + x);
+        SDL.RenderDrawPoint(g_ctx.renderer, cent_x - y, cent_y - x);
+        SDL.RenderDrawPoint(g_ctx.renderer, cent_x - y, cent_y + x);
 
         if error <= 0 {
             y += 1;
@@ -615,7 +617,7 @@ render_circle_line :: proc(ctx: ^Context, center_x, center_y, radius: i32, color
     }
 }
 
-render_circle_filled :: proc(ctx: ^Context, center_x, center_y, radius: i32, color: Color) {
+render_circle_filled :: proc(center_x, center_y, radius: i32, color: Color) {
     diameter := radius * 2;
     x: i32 = radius - 1;
     y: i32 = 0;
@@ -623,17 +625,17 @@ render_circle_filled :: proc(ctx: ^Context, center_x, center_y, radius: i32, col
     ty: i32 = 1;
     error := tx - diameter;
 
-    SDL.SetRenderDrawColor(ctx.renderer, color.r, color.g, color.b, color.a);
+    SDL.SetRenderDrawColor(g_ctx.renderer, color.r, color.g, color.b, color.a);
     cent_x := center_x;
     cent_y := center_y;
     
-    cent_x -= ctx.cam_x;
-    cent_y -= ctx.cam_y;
+    cent_x -= g_ctx.cam_x;
+    cent_y -= g_ctx.cam_y;
     for x >= y {
-        SDL.RenderDrawLine(ctx.renderer, cent_x - x, cent_y - y, cent_x + x, cent_y - y);
-        SDL.RenderDrawLine(ctx.renderer, cent_x - x, cent_y + y, cent_x + x, cent_y + y);
-        SDL.RenderDrawLine(ctx.renderer, cent_x - y, cent_y - x, cent_x + y, cent_y - x);
-        SDL.RenderDrawLine(ctx.renderer, cent_x - y, cent_y + x, cent_x + y, cent_y + x);
+        SDL.RenderDrawLine(g_ctx.renderer, cent_x - x, cent_y - y, cent_x + x, cent_y - y);
+        SDL.RenderDrawLine(g_ctx.renderer, cent_x - x, cent_y + y, cent_x + x, cent_y + y);
+        SDL.RenderDrawLine(g_ctx.renderer, cent_x - y, cent_y - x, cent_x + y, cent_y - x);
+        SDL.RenderDrawLine(g_ctx.renderer, cent_x - y, cent_y + x, cent_x + y, cent_y + x);
 
         if error <= 0 {
             y += 1;
@@ -649,15 +651,15 @@ render_circle_filled :: proc(ctx: ^Context, center_x, center_y, radius: i32, col
     }
 }
 
-render_line :: proc(ctx: ^Context, x1, y1, x2, y2: i32, color: Color) {
-    SDL.SetRenderDrawColor(ctx.renderer, color.r, color.g, color.b, color.a);
+render_line :: proc(x1, y1, x2, y2: i32, color: Color) {
+    SDL.SetRenderDrawColor(g_ctx.renderer, color.r, color.g, color.b, color.a);
 
-    SDL.RenderDrawLine(ctx.renderer, x1 - ctx.cam_x, y1 - ctx.cam_y, x2 - ctx.cam_x, y2 - ctx.cam_y);
+    SDL.RenderDrawLine(g_ctx.renderer, x1 - g_ctx.cam_x, y1 - g_ctx.cam_y, x2 - g_ctx.cam_x, y2 - g_ctx.cam_y);
 }
 
-clear_screen :: proc(ctx: ^Context, color: Color) {
-    SDL.SetRenderDrawColor(ctx.renderer, color.r, color.g, color.b, color.a);
-    SDL.RenderClear(ctx.renderer);
+clear_screen :: proc(color: Color) {
+    SDL.SetRenderDrawColor(g_ctx.renderer, color.r, color.g, color.b, color.a);
+    SDL.RenderClear(g_ctx.renderer);
 }
 
 get_rotation :: proc(x1, y1, x2, y2: i32) -> f32 {
@@ -666,11 +668,11 @@ get_rotation :: proc(x1, y1, x2, y2: i32) -> f32 {
     return rotation >= 0 ? rotation : 360 + rotation;
 }
 
-apply_camera :: proc(ctx: ^Context, cam: ^Camera2D) {
-    ctx.cam_x = cam.x;
-    ctx.cam_y = cam.y;
+apply_camera :: proc(cam: ^Camera2D) {
+    g_ctx.cam_x = cam.x;
+    g_ctx.cam_y = cam.y;
 
-    SDL.RenderSetScale(ctx.renderer, cam.zoom, cam.zoom);
+    SDL.RenderSetScale(g_ctx.renderer, cam.zoom, cam.zoom);
 }
 
 camera_follow :: proc(cam: ^Camera2D, target_x, target_y: i32) {
