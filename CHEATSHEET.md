@@ -1,7 +1,7 @@
 # WELCOME
 Hello! This is a simple cheatsheet of all the functinality of Nexa. This will go over all the functions, structs, enums, etc and give a short explanation of how they work. Enjoy :)
 
-# DEFINES
+# CONSTANTS
 ## Colors
 All the preset colors available for use.
 ```go
