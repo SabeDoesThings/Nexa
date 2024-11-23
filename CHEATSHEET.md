@@ -199,7 +199,7 @@ MouseButtons :: enum {
 # FUNCTIONS
 ## game
 The function that creates your nexa app.
-You pass in your on_run, update, and render functions and you title, width and height of the window, and whether or not you want to window to be resizable or not.
+You pass in your init, update, and render functions and you title, width and height of the window, and whether or not you want to window to be resizable or not.
 ```go
 game :: proc(
     init: proc(),
