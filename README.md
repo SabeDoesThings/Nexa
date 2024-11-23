@@ -3,7 +3,7 @@
 A simple [odin](https://odin-lang.org/) library I made to use to make my games :)
 
 ## Getting Started
-1. First get [Odin](https://odin-lang.org/) is installed.
+1. First get [Odin](https://odin-lang.org/) installed.
 2. Add the nexa [folder](https://github.com/SabeDoesThings/Nexa/tree/main/nexa) to your project.
 3. Then add all of the SDL [dlls](https://github.com/odin-lang/Odin/tree/master/vendor/sdl2) to your main directory.
 4. You can see a full example project [here](https://github.com/SabeDoesThings/Nexa/tree/main/examples).
