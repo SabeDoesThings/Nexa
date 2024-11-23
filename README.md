@@ -18,7 +18,7 @@ init :: proc() {}
 
 update :: proc(dt: f32) {}
 
-render :: proc(ctx: ^nx.Context) {}
+render :: proc() {}
 
 main :: proc() {
   nx.game(init, update, render, "Nexa Game", 1280, 720, false)
