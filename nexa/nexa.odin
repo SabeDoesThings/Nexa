@@ -688,12 +688,16 @@ apply_camera :: proc(cam: ^Camera2D) {
 }
 
 camera_follow :: proc(cam: ^Camera2D, target_x, target_y: f32) {
+    cam.x = target_x;
+    cam.y = target_y;
+}
+
+camera_follow_lerp :: proc(cam: ^Camera2D, target_x, target_y, lerp_amount: f32) {
     target_cam_x := target_x - (cam.w / 2) / cam.zoom;
     target_cam_y := target_y - (cam.h / 2) / cam.zoom;
 
-    // lerping
-    cam.x += (target_cam_x - cam.x) * 0.1;
-    cam.y += (target_cam_y - cam.y) * 0.1;
+    cam.x += (target_cam_x - cam.x) * lerp_amount;
+    cam.y += (target_cam_y - cam.y) * lerp_amount;
 }
 
 clamp_camera :: proc(cam: ^Camera2D) {
