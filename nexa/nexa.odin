@@ -145,8 +145,7 @@ Animation :: struct {
 }
 
 Camera2D :: struct {
-	x, y: f32,
-	zoom: f32,
+	x, y, w, h, zoom: f32,
 }
 
 // ███████ ███    ██ ██    ██ ███    ███ ███████ 
@@ -689,6 +688,15 @@ apply_camera :: proc(cam: ^Camera2D) {
 }
 
 camera_follow :: proc(cam: ^Camera2D, target_x, target_y: f32) {
-    cam.x = target_x;
-    cam.y = target_y;
+    target_cam_x := target_x - (cam.w / 2) / cam.zoom;
+    target_cam_y := target_y - (cam.h / 2) / cam.zoom;
+
+    // lerping
+    cam.x += (target_cam_x - cam.x) * 0.1;
+    cam.y += (target_cam_y - cam.y) * 0.1;
+}
+
+clamp_camera :: proc(cam: ^Camera2D) {
+    cam.x = max(0, min(cam.x, cam.w - cam.w / cam.zoom));
+    cam.y = max(0, min(cam.y, cam.h - cam.h / cam.zoom));
 }
