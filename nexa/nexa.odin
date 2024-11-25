@@ -482,7 +482,7 @@ run_animation :: proc(anim: ^Animation, dt: f32, looped: bool) {
     }
 }
 
-render_animation :: proc(anim: ^Animation, dest_x, dest_y: f32, rotation: f32, flip: bool) {
+render_animation :: proc(anim: ^Animation, dest_x, dest_y: f32, rotation: f32, flip_x: bool, flip_y: bool) {
     tex := SDL.CreateTextureFromSurface(g_ctx.renderer, anim.texture.t_surface);
     if tex == nil {
         fmt.printf("Failed to create texture! ERROR: %s\n", SDL.GetError());
@@ -497,8 +497,11 @@ render_animation :: proc(anim: ^Animation, dest_x, dest_y: f32, rotation: f32, f
     center: SDL.Point = SDL.Point{x = i32(anim.frame_width) / 2, y = i32(anim.frame_height) / 2,};
 
     flip_mode: SDL.RendererFlip;
-    if flip {
+    if flip_x {
         flip_mode = SDL.RendererFlip.HORIZONTAL;
+    }
+    else if flip_y {
+        flip_mode = SDL.RendererFlip.VERTICAL;
     }
     else {
         flip_mode = SDL.RendererFlip.NONE;
@@ -514,7 +517,7 @@ reset_animation :: proc(anim: ^Animation) {
     anim.elapsed_time = 0.0;
 }
 
-render_texture :: proc(tex: ^Texture2D, tex_x, tex_y: f32, rotation: f32, flip: bool) {
+render_texture :: proc(tex: ^Texture2D, tex_x, tex_y: f32, rotation: f32, flip_x: bool, flip_y: bool) {
     texture := SDL.CreateTextureFromSurface(g_ctx.renderer, tex.t_surface);
 
     width: i32 = 0;
@@ -528,8 +531,11 @@ render_texture :: proc(tex: ^Texture2D, tex_x, tex_y: f32, rotation: f32, flip: 
     center: SDL.Point = {width / 2, height / 2};
 
     flip_mode: SDL.RendererFlip;
-    if flip {
+    if flip_x {
         flip_mode = SDL.RendererFlip.HORIZONTAL;
+    }
+    else if flip_y {
+        flip_mode = SDL.RendererFlip.VERTICAL;
     }
     else {
         flip_mode = SDL.RendererFlip.NONE;
@@ -674,10 +680,12 @@ clear_screen :: proc(color: Color) {
     SDL.RenderClear(g_ctx.renderer);
 }
 
-get_rotation :: proc(x1, y1, x2, y2: f32) -> f32 {
-    rotation: f32 = -90.0 + linalg.atan2(f32(y1 - y2), f32(x1 - x2)) * (180.0 / math.PI);
+rad_to_deg :: proc(radians: f32) -> f32 {
+    return radians * (180.0 / math.PI);
+}
 
-    return rotation >= 0 ? rotation : 360 + rotation;
+deg_to_rad :: proc(degrees: f32) -> f32 {
+    return degrees * (math.PI / 180.0);
 }
 
 apply_camera :: proc(cam: ^Camera2D) {
