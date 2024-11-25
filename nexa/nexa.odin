@@ -8,6 +8,7 @@ import fmt "core:fmt";
 import math "core:math";
 import linalg "core:math/linalg";
 import mem "core:mem";
+import os "core:os";
 
 //  ██████  ██████  ███    ██ ███████ ████████  █████  ███    ██ ████████ ███████ 
 // ██      ██    ██ ████   ██ ██         ██    ██   ██ ████   ██    ██    ██      
@@ -183,6 +184,7 @@ Keys :: enum(u32) {
     Z = u32(SDL.Scancode.Z),
     SPACE = u32(SDL.Scancode.SPACE),
     ESCAPE = u32(SDL.Scancode.ESCAPE),
+    LSHIFT = u32(SDL.Scancode.LSHIFT),
     UP = u32(SDL.Scancode.UP),
     DOWN = u32(SDL.Scancode.DOWN),
     LEFT = u32(SDL.Scancode.LEFT),
@@ -387,16 +389,10 @@ is_mouse_button_pressed :: proc(button: MouseButtons) -> bool {
 }
 
 check_collision_rect :: proc(rect1, rect2: Rectangle) -> bool {
-    if rect1.x < rect2.x + rect2.width &&
-        rect1.x + rect1.width > rect2.x &&
-        rect1.y < rect2.y + rect2.height &&
-        rect1.y + rect1.height > rect2.y
-    {
-        return true;
-    }
-    else {
-        return false;
-    }
+    return rect1.x < rect2.x + rect2.width &&
+           rect1.x + rect1.width > rect2.x &&
+           rect1.y < rect2.y + rect2.height &&
+           rect1.y + rect1.height > rect2.y;
 }
 
 play_audio :: proc(sound: cstring) {
@@ -702,7 +698,7 @@ camera_follow :: proc(cam: ^Camera2D, target_x, target_y: f32) {
 
 camera_follow_lerp :: proc(cam: ^Camera2D, target_x, target_y, lerp_amount: f32) {
     target_cam_x := target_x - (cam.w / 2) / cam.zoom;
-    target_cam_y := target_y - (cam.h / 2) / cam.zoom;
+    target_cam_y := target_y - (cam.h / 1.5) / cam.zoom;
 
     cam.x += (target_cam_x - cam.x) * lerp_amount;
     cam.y += (target_cam_y - cam.y) * lerp_amount;
@@ -711,4 +707,21 @@ camera_follow_lerp :: proc(cam: ^Camera2D, target_x, target_y, lerp_amount: f32)
 clamp_camera :: proc(cam: ^Camera2D) {
     cam.x = max(0, min(cam.x, cam.w - cam.w / cam.zoom));
     cam.y = max(0, min(cam.y, cam.h - cam.h / cam.zoom));
+}
+
+clamp_camera_target :: proc(cam: ^Camera2D, target_x, target_y: f32) {
+    cam.x = max(0, min(target_x - (cam.w / (2 * cam.zoom)), cam.w - (cam.w / cam.zoom)));
+    cam.y = max(0, min(target_y - (cam.h / (2 * cam.zoom)), cam.h - (cam.h / cam.zoom)));
+}
+
+disable_cursor :: proc() {
+    SDL.ShowCursor(SDL.DISABLE);
+}
+
+clamp_mouse :: proc() {
+    SDL.SetRelativeMouseMode(true);
+}
+
+close_window :: proc() {
+    os.exit(0);
 }
