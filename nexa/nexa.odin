@@ -9,6 +9,7 @@ import math "core:math";
 import linalg "core:math/linalg";
 import mem "core:mem";
 import os "core:os";
+import json "core:encoding/json";
 
 //  ██████  ██████  ███    ██ ███████ ████████  █████  ███    ██ ████████ ███████ 
 // ██      ██    ██ ████   ██ ██         ██    ██   ██ ████   ██    ██    ██      
@@ -116,37 +117,37 @@ CORNFLOWERBLUE : Color : { 100, 149, 237, 255 };    // Cornflower Blue
 // >>structs
 @(private="file")
 Context :: struct {
-	renderer: ^SDL.Renderer,
-	cam_x, cam_y: f32,
+    renderer: ^SDL.Renderer,
+    cam_x, cam_y: f32,
 }
 
 Texture2D :: struct {
-	t_surface: ^SDL.Surface,
-	width, height: f32,
+    t_surface: ^SDL.Surface,
+    width, height: f32,
 }
 
 Color :: struct {
-	r, g, b, a: u8,
+    r, g, b, a: u8,
 }   
 
 Rectangle :: struct {
-	x, y, width, height: f32,
+    x, y, width, height: f32,
 }
 
 Animation :: struct {
-	texture: Texture2D,
-	frame_width: f32,
-	frame_height: f32,
-	num_frame: f32,
-	frame_time: f32,
-	current_frame: f32,
-	elapsed_time: f32,
-	start_frame: f32,
-	end_frame: f32,
+    texture: Texture2D,
+    frame_width: f32,
+    frame_height: f32,
+    num_frame: f32,
+    frame_time: f32,
+    current_frame: f32,
+    elapsed_time: f32,
+    start_frame: f32,
+    end_frame: f32,
 }
 
 Camera2D :: struct {
-	x, y, w, h, zoom: f32,
+    x, y, w, h, zoom: f32,
 }
 
 // ███████ ███    ██ ██    ██ ███    ███ ███████ 
@@ -156,7 +157,7 @@ Camera2D :: struct {
 // ███████ ██   ████  ██████  ██      ██ ███████ 
 // >>enums
 Keys :: enum(u32) {
-	A = u32(SDL.Scancode.A),
+    A = u32(SDL.Scancode.A),
     B = u32(SDL.Scancode.B),
     C = u32(SDL.Scancode.C),
     D = u32(SDL.Scancode.D),
@@ -189,6 +190,19 @@ Keys :: enum(u32) {
     DOWN = u32(SDL.Scancode.DOWN),
     LEFT = u32(SDL.Scancode.LEFT),
     RIGHT = u32(SDL.Scancode.RIGHT),
+    TAB = u32(SDL.Scancode.TAB),
+    F1 = u32(SDL.Scancode.F1),
+    F2 = u32(SDL.Scancode.F2),
+    F3 = u32(SDL.Scancode.F3),
+    F4 = u32(SDL.Scancode.F4),
+    F5 = u32(SDL.Scancode.F5),
+    F6 = u32(SDL.Scancode.F6),
+    F7 = u32(SDL.Scancode.F7),
+    F8 = u32(SDL.Scancode.F8),
+    F9 = u32(SDL.Scancode.F9),
+    F10 = u32(SDL.Scancode.F10),
+    F11 = u32(SDL.Scancode.F11),
+    F12 = u32(SDL.Scancode.F12),
     MAX_KEYS,
 }
 
@@ -538,6 +552,42 @@ render_texture :: proc(tex: ^Texture2D, tex_x, tex_y: f32, rotation: f32, flip_x
     }
 
     SDL.RenderCopyEx(g_ctx.renderer, texture, nil, &dst, f64(rotation), &center, flip_mode);
+
+    SDL.DestroyTexture(texture);
+}
+
+@(private = "file")
+rectangle_to_sdl_rect :: proc(r: ^Rectangle) -> ^SDL.Rect {
+    return cast(^SDL.Rect) r;
+}
+
+render_sub_texture :: proc(tex: ^Texture2D, src_rect, dest_rect: ^Rectangle, rotation: f32, flip_x: bool, flip_y: bool) {
+    texture := SDL.CreateTextureFromSurface(g_ctx.renderer, tex.t_surface);
+
+    width: i32 = 0;
+    height: i32 = 0;
+    if SDL.QueryTexture(texture, nil, nil, &width, &height) != 0 {
+        fmt.printf("Failed to render texture! ERROR: %s", SDL.GetError());
+        return;
+    }
+
+    dest_rect.x -= g_ctx.cam_x;
+    dest_rect.y -= g_ctx.cam_y;
+
+    center: SDL.Point = {width / 2, height / 2};
+
+    flip_mode: SDL.RendererFlip;
+    if flip_x {
+        flip_mode = SDL.RendererFlip.HORIZONTAL;
+    }
+    else if flip_y {
+        flip_mode = SDL.RendererFlip.VERTICAL;
+    }
+    else {
+        flip_mode = SDL.RendererFlip.NONE;
+    }
+
+    SDL.RenderCopyEx(g_ctx.renderer, texture, rectangle_to_sdl_rect(src_rect), rectangle_to_sdl_rect(dest_rect), f64(rotation), &center, flip_mode);
 
     SDL.DestroyTexture(texture);
 }
