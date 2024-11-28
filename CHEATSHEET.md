@@ -4,7 +4,7 @@ Hello! This is a simple cheatsheet of all the functinality of Nexa. This will go
 # CONSTANTS
 ## Colors
 All the preset colors available for use.
-```go
+```odin
 WHITE      : Color : { 255, 255, 255, 255 };        // White
 BLACK      : Color : { 0, 0, 0, 255 };              // Black
 RED        : Color : { 255, 0, 0, 255 };            // Red
@@ -93,7 +93,7 @@ CORNFLOWERBLUE : Color : { 100, 149, 237, 255 };    // Cornflower Blue
 # STRUCTS
 ## Texure2D
 The struct for a 2D texture.
-```go
+```odin
 Texture2D :: struct {
     t_surface: ^SDL.Surface, // Basically the id of the texture
     width, height: i32,      // The width and height of the texture
@@ -102,7 +102,7 @@ Texture2D :: struct {
 
 ## Color
 The struct to make a rgba color.
-```go
+```odin
 Color :: struct {
     r, g, b, a: u8, // red, green, blue, alpha
 } 
@@ -110,7 +110,7 @@ Color :: struct {
 
 ## Rectangle
 The struct to make a simple rectangle shape.
-```go
+```odin
 Rectangle :: struct {
     x, y, width, height: i32,
     // x pos, y pos, width and height of the rectangle
@@ -119,7 +119,7 @@ Rectangle :: struct {
 
 ## Animation
 The struct to make an animation.
-```go
+```odin
 Animation :: struct {
     texture: Texture2D,      // The entire spritesheet texture
     frame_width: i32,        // The width of one frame 
@@ -135,7 +135,7 @@ Animation :: struct {
 
 ## Camera2D
 The struct for a 2d camera.
-```go
+```odin
 Camera2D :: struct {
     x, y: i32,        // x and y position
     zoom: f32,        // zoom amount
@@ -145,7 +145,7 @@ Camera2D :: struct {
 # ENUMS
 ## Keys
 The keys you can use in a program.
-```go
+```odin
 Keys :: enum(u32) {
     A = u32(SDL.Scancode.A),             // The 'A' key
     B = u32(SDL.Scancode.B),             // The 'B' key
@@ -185,7 +185,7 @@ Keys :: enum(u32) {
 
 ## MouseButtons
 The mouse buttons you can use in a program.
-```go
+```odin
 MouseButtons :: enum {
     LEFT = SDL.BUTTON_LEFT,     // The 'LEFT' mouse button
     MIDDLE = SDL.BUTTON_MIDDLE, // The 'MIDDLE' mouse button
@@ -200,7 +200,7 @@ MouseButtons :: enum {
 ## game
 The function that creates your nexa app.
 You pass in your init, update, and render functions and you title, width and height of the window, and whether or not you want to window to be resizable or not.
-```go
+```odin
 game :: proc(
     init: proc(),
     update: proc(dt: f32),
@@ -214,85 +214,85 @@ game :: proc(
 
 ## get_mouse_position
 A simple fucntion to get the position of the mouse.
-```go
+```odin
 get_mouse_position :: proc(x, y: ^i32)
 ```
 
 ## load_texture
 The function needed to load a texture to use.
-```go
+```odin
 load_texture :: proc(file_path: cstring) -> Texture2D
 ```
 
 ## load_font
 The function need to load a font to use.
-```go
+```odin
 load_font :: proc(font_path: cstring, font_size: i32) -> ^TTF.Font
 ```
 
 ## is_key_down
 A check to see if a key is held down.
-```go
+```odin
 is_key_down :: proc(key: Keys) -> bool
 ```
 
 ## is_key_pressed
 A check to see if a key is pressed.
-```go
+```odin
 is_key_pressed :: proc(key: Keys) -> bool
 ```
 
 ## is_mouse_button_down
 A check to see if a mouse button is held down.
-```go
+```odin
 is_mouse_button_down :: proc(button: MouseButtons) -> bool
 ```
 
 ## is_mouse_button_pressed
 A check to see if a mouse button is pressed.
-```go
+```odin
 is_mouse_button_pressed :: proc(button: MouseButtons) -> bool
 ```
 
 ## check_collision_rect
 A check to see if 2 rectangles collided with eachother
-```go
+```odin
 check_collision_rect :: proc(rect1, rect2: Rectangle) -> bool
 ```
 
 ## play_audio
 The function to play a audio file.
-```go
+```odin
 play_audio :: proc(sound: cstring)
 ```
 
 ## play_audio_looped
 The function to play a audio file looped.
-```go
+```odin
 play_audio_looped :: proc(sound: cstring)
 ```
 
 ## play_music_looped
 The function to play music. (Basically just any longer sound file played over and over again)
-```go
+```odin
 play_music_looped :: proc(music: cstring)
 ```
 
 ## stop_music
 The function to stop any music playing.
-```go
+```odin
 stop_music :: proc()
 ```
 
 ## stop_audio
 The function to stop any audio playing
-```go
+```odin
 stop_audio :: proc()
 ```
 
 ## create_animation
 The function to create a new animation.
-```go
+```odin
 create_animation :: proc(
     texture: Texture2D, 
     frame_width, frame_height, num_frames: i32, 
@@ -303,13 +303,13 @@ create_animation :: proc(
 
 ## run_animation
 The function need to run an animation.
-```go
+```odin
 run_animation :: proc(anim: ^Animation, dt: f32, looped: bool)
 ```
 
 ## render_animation
 The function to render an animation to the screen.
-```go
+```odin
 render_animation :: proc(
     anim: ^Animation, 
     dest_x, dest_y: i32, 
@@ -320,7 +320,7 @@ render_animation :: proc(
 
 ## render_texture
 The function to render a texture to the screen.
-```go
+```odin
 render_texture :: proc(
     tex: ^Texture2D, 
     tex_x, tex_y: i32, 
@@ -331,7 +331,7 @@ render_texture :: proc(
 
 ## render_text
 The function to render text to the screen.
-```go
+```odin
 render_text :: proc(
     font: ^TTF.Font, 
     text: cstring, 
@@ -342,54 +342,54 @@ render_text :: proc(
 
 ## render_rect_filled
 The function to render a filled rectangle shape to the screen.
-```go
+```odin
 render_rect_filled :: proc(x, y, width, height: i32, color: Color)
 ```
 
 ## render_rect_line
 The function to render an outline of a rectangle shape to the screen.
-```go
+```odin
 render_rect_line :: proc(x, y, width, height: i32, color: Color)
 ```
 
 ## render_circle_filled
 The function to render a filled circle shape to the screen.
-```go
+```odin
 render_circle_filled :: proc(center_x, center_y, radius: i32, color: Color)
 ```
 
 ## render_circle_line
 The function to render an outline of a circle shape to the screen.
-```go
+```odin
 render_circle_line :: proc(center_x, center_y, radius: i32, color: Color)
 ```
 
 ## render_line
 The function to render a line to the screen.
-```go
+```odin
 render_line :: proc(x1, y1, x2, y2: i32, color: Color)
 ```
 
 ## clear_screen
 The function to clear the screen every frame to a certain color.
-```go
+```odin
 clear_screen :: proc(color: Color)
 ```
 
 ## get_rotation
 The function to get the rotation between two points.
-```go
+```odin
 get_rotation :: proc(x1, y1, x2, y2: i32) -> f32
 ```
 
 ## apply_camera
 The function to apply the camera to the application.
-```go
+```odin
 apply_camera :: proc(cam: ^Camera2D)
 ```
 
 ## camera_follow
 The function to make the camera follow an object.
-```go
+```odin
 camera_follow :: proc(cam: ^Camera2D, target_x, target_y: i32)
 ```
