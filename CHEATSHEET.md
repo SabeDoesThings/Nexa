@@ -94,27 +94,19 @@ CORNFLOWERBLUE : Color : { 100, 149, 237, 255 };    // Cornflower Blue
 ## Texure2D
 The struct for a 2D texture.
 ```odin
-Texture2D :: struct {
-    t_surface: ^SDL.Surface, // Basically the id of the texture
-    width, height: i32,      // The width and height of the texture
-}
+Texture2D :: rl.Texture2D;
 ```
 
 ## Color
 The struct to make a rgba color.
 ```odin
-Color :: struct {
-    r, g, b, a: u8, // red, green, blue, alpha
-} 
+Color :: rl.Color; 
 ```
 
 ## Rectangle
 The struct to make a simple rectangle shape.
 ```odin
-Rectangle :: struct {
-    x, y, width, height: i32,
-    // x pos, y pos, width and height of the rectangle
-}
+Rectangle :: rl.Rectangle;
 ```
 
 ## Animation
@@ -122,24 +114,45 @@ The struct to make an animation.
 ```odin
 Animation :: struct {
     texture: Texture2D,      // The entire spritesheet texture
-    frame_width: i32,        // The width of one frame 
-    frame_height: i32,       // The height of one frame
-    num_frame: i32,          // The number of frames for the animation to go through
+    frame_width: f32,        // The width of one frame 
+    frame_height: f32,       // The height of one frame
+    num_frame: f32,          // The number of frames for the animation to go through
     frame_time: f32,         // How long to stay on a frame 
-    current_frame: i32,      // The current frame
+    current_frame: f32,      // The current frame
     elapsed_time: f32,       // The amount of time that passes between frames
-    start_frame: i32,        // The starting frame of the animation
-    end_frame: i32,          // The frame to stop on before looping back
+    start_frame: f32,        // The starting frame of the animation
+    end_frame: f32,          // The frame to stop on before looping back
 }
 ```
 
 ## Camera2D
 The struct for a 2d camera.
 ```odin
-Camera2D :: struct {
-    x, y: i32,        // x and y position
-    zoom: f32,        // zoom amount
-}
+Camera2D :: rl.Camera2D;
+```
+
+## Vector2
+The struct to make a Vector2
+```odin
+Vector2 :: rl.Vector2;
+```
+
+## Font
+The Font type
+```odin
+Font :: rl.Font;
+```
+
+## Audio
+The Audio type
+```odin
+Audio :: rl.Sound;
+```
+
+## Music
+The Music type
+```odin
+Music :: rl.Music;
 ```
 
 # ENUMS
@@ -147,52 +160,62 @@ Camera2D :: struct {
 The keys you can use in a program.
 ```odin
 Keys :: enum(u32) {
-    A = u32(SDL.Scancode.A),             // The 'A' key
-    B = u32(SDL.Scancode.B),             // The 'B' key
-    C = u32(SDL.Scancode.C),             // The 'C' key
-    D = u32(SDL.Scancode.D),             // The 'D' key
-    E = u32(SDL.Scancode.E),             // The 'E' key
-    F = u32(SDL.Scancode.F),             // The 'F' key
-    G = u32(SDL.Scancode.G),             // The 'G' key
-    H = u32(SDL.Scancode.H),             // The 'H' key 
-    I = u32(SDL.Scancode.I),             // The 'I' key
-    J = u32(SDL.Scancode.J),             // The 'J' key
-    K = u32(SDL.Scancode.K),             // The 'K' key
-    L = u32(SDL.Scancode.L),             // The 'L' key
-    M = u32(SDL.Scancode.M),             // The 'M' key
-    N = u32(SDL.Scancode.N),             // The 'N' key
-    O = u32(SDL.Scancode.O),             // The 'O' key
-    P = u32(SDL.Scancode.P),             // The 'P' key
-    Q = u32(SDL.Scancode.Q),             // The 'Q' key
-    R = u32(SDL.Scancode.R),             // The 'R' key
-    S = u32(SDL.Scancode.S),             // The 'S' key
-    T = u32(SDL.Scancode.T),             // The 'T' key
-    U = u32(SDL.Scancode.U),             // The 'U' key
-    V = u32(SDL.Scancode.V),             // The 'V' key
-    W = u32(SDL.Scancode.W),             // The 'W' key
-    X = u32(SDL.Scancode.X),             // The 'X' key
-    Y = u32(SDL.Scancode.Y),             // The 'X' key
-    Z = u32(SDL.Scancode.Z),             // The 'Z' key
-    SPACE = u32(SDL.Scancode.SPACE),     // The 'SPACE' key
-    ESCAPE = u32(SDL.Scancode.ESCAPE),   // The 'ESCAPE' key
-    UP = u32(SDL.Scancode.UP),           // The 'UP' arrow key
-    DOWN = u32(SDL.Scancode.DOWN),       // The 'DOWN' arrow key
-    LEFT = u32(SDL.Scancode.LEFT),       // The 'LEFT' arrow key
-    RIGHT = u32(SDL.Scancode.RIGHT),     // The 'RIGHT' arrow key
-    MAX_KEYS,                            // The maximum amount of keys
+    A = u32(rl.KeyboardKey.A),               // The 'A' key
+    B = u32(rl.KeyboardKey.B),               // The 'B' key
+    C = u32(rl.KeyboardKey.C),               // The 'C' key
+    D = u32(rl.KeyboardKey.D),               // The 'D' key
+    E = u32(rl.KeyboardKey.E),               // The 'E' key
+    F = u32(rl.KeyboardKey.F),               // The 'F' key
+    G = u32(rl.KeyboardKey.G),               // The 'G' key
+    H = u32(rl.KeyboardKey.H),               // The 'H' key 
+    I = u32(rl.KeyboardKey.I),               // The 'I' key
+    J = u32(rl.KeyboardKey.J),               // The 'J' key
+    K = u32(rl.KeyboardKey.K),               // The 'K' key
+    L = u32(rl.KeyboardKey.L),               // The 'L' key
+    M = u32(rl.KeyboardKey.M),               // The 'M' key
+    N = u32(rl.KeyboardKey.N),               // The 'N' key
+    O = u32(rl.KeyboardKey.O),               // The 'O' key
+    P = u32(rl.KeyboardKey.P),               // The 'P' key
+    Q = u32(rl.KeyboardKey.Q),               // The 'Q' key
+    R = u32(rl.KeyboardKey.R),               // The 'R' key
+    S = u32(rl.KeyboardKey.S),               // The 'S' key
+    T = u32(rl.KeyboardKey.T),               // The 'T' key
+    U = u32(rl.KeyboardKey.U),               // The 'U' key
+    V = u32(rl.KeyboardKey.V),               // The 'V' key
+    W = u32(rl.KeyboardKey.W),               // The 'W' key
+    X = u32(rl.KeyboardKey.X),               // The 'X' key
+    Y = u32(rl.KeyboardKey.Y),               // The 'X' key
+    Z = u32(rl.KeyboardKey.Z),               // The 'Z' key
+    SPACE = u32(rl.KeyboardKey.SPACE),       // The 'SPACE' key
+    ESCAPE = u32(rl.KeyboardKey.ESCAPE),     // The 'ESCAPE' key
+    LSHIFT = u32(rl.KeyboardKey.LEFT_SHIFT), // The 'LEFT SHIFT' key
+    UP = u32(rl.KeyboardKey.UP),             // The 'UP' arrow key
+    DOWN = u32(rl.KeyboardKey.DOWN),         // The 'DOWN' arrow key
+    LEFT = u32(rl.KeyboardKey.LEFT),         // The 'LEFT' arrow key
+    RIGHT = u32(rl.KeyboardKey.RIGHT),       // The 'RIGHT' arrow key
+    TAB = u32(rl.KeyboardKey.TAB),           // The 'TAB' key
+    F1 = u32(rl.KeyboardKey.F1),             // The "F1" key
+    F2 = u32(rl.KeyboardKey.F2),             // The "F2" key
+    F3 = u32(rl.KeyboardKey.F3),             // The "F3" key
+    F4 = u32(rl.KeyboardKey.F4),             // The "F4" key
+    F5 = u32(rl.KeyboardKey.F5),             // The "F5" key
+    F6 = u32(rl.KeyboardKey.F6),             // The "F6" key
+    F7 = u32(rl.KeyboardKey.F7),             // The "F7" key
+    F8 = u32(rl.KeyboardKey.F8),             // The "F8" key
+    F9 = u32(rl.KeyboardKey.F9),             // The "F9" key
+    F10 = u32(rl.KeyboardKey.F10),           // The "F10" key
+    F11 = u32(rl.KeyboardKey.F11),           // The "F11" key
+    F12 = u32(rl.KeyboardKey.F12),           // The "F12" key
 }
 ```
 
 ## MouseButtons
 The mouse buttons you can use in a program.
 ```odin
-MouseButtons :: enum {
-    LEFT = SDL.BUTTON_LEFT,     // The 'LEFT' mouse button
-    MIDDLE = SDL.BUTTON_MIDDLE, // The 'MIDDLE' mouse button
-    RIGHT = SDL.BUTTON_RIGHT,   // The 'RIGHT' mouse button
-    X1 = SDL.BUTTON_X1,         // The 'X1' mouse button
-    X2 = SDL.BUTTON_X2,         // The 'X2' mouse button
-    MAX_BUTTONS                 // The maximum amount of mouse buttons
+MouseButtons :: enum(u32) {
+    LEFT = u32(rl.MouseButton.LEFT),     // The 'LEFT' mouse button
+    MIDDLE = u32(rl.MouseButton.MIDDLE), // The 'MIDDLE' mouse button
+    RIGHT = u32(rl.MouseButton.RIGHT),   // The 'RIGHT' mouse button
 }
 ```
 
@@ -215,7 +238,7 @@ game :: proc(
 ## get_mouse_position
 A simple fucntion to get the position of the mouse.
 ```odin
-get_mouse_position :: proc(x, y: ^i32)
+get_mouse_position :: proc() -> Vector2
 ```
 
 ## load_texture
@@ -227,7 +250,7 @@ load_texture :: proc(file_path: cstring) -> Texture2D
 ## load_font
 The function need to load a font to use.
 ```odin
-load_font :: proc(font_path: cstring, font_size: i32) -> ^TTF.Font
+load_font :: proc(font_path: cstring, font_size: i32) -> Font
 ```
 
 ## is_key_down
@@ -260,34 +283,46 @@ A check to see if 2 rectangles collided with eachother
 check_collision_rect :: proc(rect1, rect2: Rectangle) -> bool
 ```
 
+## load_audio
+The function to load a audio file.
+```odin
+load_audio :: proc(sound: cstring) -> Audio
+```
+
 ## play_audio
 The function to play a audio file.
 ```odin
 play_audio :: proc(sound: cstring)
 ```
 
-## play_audio_looped
-The function to play a audio file looped.
+## load_music
+The function to load a music file.
 ```odin
-play_audio_looped :: proc(sound: cstring)
+load_music :: proc(music_path: cstring) -> Music
 ```
 
-## play_music_looped
+## play_music
 The function to play music. (Basically just any longer sound file played over and over again)
 ```odin
-play_music_looped :: proc(music: cstring)
+play_music :: proc(music: Music)
+```
+
+## update_music
+The function to update music.
+```odin
+update_music :: proc(music: Music)
 ```
 
 ## stop_music
 The function to stop any music playing.
 ```odin
-stop_music :: proc()
+stop_music :: proc(music: Music)
 ```
 
 ## stop_audio
 The function to stop any audio playing
 ```odin
-stop_audio :: proc()
+stop_audio :: proc(audio: Audio)
 ```
 
 ## create_animation
@@ -312,20 +347,37 @@ The function to render an animation to the screen.
 ```odin
 render_animation :: proc(
     anim: ^Animation, 
-    dest_x, dest_y: i32, 
+    dest_x, dest_y: f32, 
     rotation: f32, 
-    flip: bool
+    flip_x, flip_y: bool
 )
+```
+
+## reset_animation
+The function to reset an animation.
+```odin
+reset_animation :: proc(anim: ^Animation)
 ```
 
 ## render_texture
 The function to render a texture to the screen.
 ```odin
 render_texture :: proc(
-    tex: ^Texture2D, 
-    tex_x, tex_y: i32, 
+    tex: Texture2D, 
+    tex_x, tex_y: f32, 
     rotation: f32, 
-    flip: bool
+    flip_x, flip_y: bool
+)
+```
+
+## render_sub_texture
+The function to create a sub texture
+```odin
+render_sub_texture :: proc(
+    tex: Texture2D, 
+    src_rect, dest_rect: Rectangle, 
+    rotation: f32, 
+    flip_x: bool, flip_y: bool
 )
 ```
 
@@ -333,10 +385,12 @@ render_texture :: proc(
 The function to render text to the screen.
 ```odin
 render_text :: proc(
-    font: ^TTF.Font, 
+    font: Font, 
     text: cstring, 
+    font_size: f32, 
+    spacing: f32, 
     color: Color, 
-    x, y: i32
+    x, y: f32
 )
 ```
 
@@ -376,10 +430,16 @@ The function to clear the screen every frame to a certain color.
 clear_screen :: proc(color: Color)
 ```
 
-## get_rotation
-The function to get the rotation between two points.
+## rad_to_deg
+The function to turn a radian to a degree
 ```odin
-get_rotation :: proc(x1, y1, x2, y2: i32) -> f32
+rad_to_deg :: proc(radians: f32) -> f32
+```
+
+## deg_to_rad
+The function to turn a degree to a radian
+```odin
+rad_to_deg :: proc(radians: f32) -> f32
 ```
 
 ## apply_camera
@@ -388,8 +448,50 @@ The function to apply the camera to the application.
 apply_camera :: proc(cam: ^Camera2D)
 ```
 
-## camera_follow
-The function to make the camera follow an object.
+## end_camera
+The function to end the camera.
 ```odin
-camera_follow :: proc(cam: ^Camera2D, target_x, target_y: i32)
+end_camera :: proc()
+```
+
+## camera_follow
+The function to make the camera follow a target.
+```odin
+camera_follow :: proc(cam: ^Camera2D, target_x, target_y: f32)
+```
+
+## camera_follow_lerp
+The function to follow a target with lerp
+```odin
+camera_follow_lerp :: proc(cam: ^Camera2D, target_x, target_y, lerp_amount: f32)
+```
+
+## clamp_camera
+The function to clamp the camera to the screen.
+```odin
+clamp_camera :: proc(cam: ^Camera2D, world_width, world_height: f32)
+```
+
+## clamp_camera_target
+The function to clamp the camera to a target.
+```odin
+clamp_camera_target :: proc(cam: ^Camera2D, target_x, target_y, world_width, world_height: f32)
+```
+
+## disable_cursor
+The function to disable the cursor.
+```odin
+disable_cursor :: proc()
+```
+
+## clamp_mouse
+The function to clamp the mouse to screen bounds.
+```odin
+clamp_mouse :: proc()
+```
+
+## close_window
+The function to close the window.
+```odin
+close_window :: proc()
 ```
