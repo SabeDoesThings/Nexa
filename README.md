@@ -8,7 +8,7 @@ A simple [odin](https://odin-lang.org/) library I made to use to make my games :
 That's all you need to do!
 
 ### Basic Gameloop
-```go
+```odin
 package main
 
 import nx "nexa"
