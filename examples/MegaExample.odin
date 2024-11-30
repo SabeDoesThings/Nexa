@@ -1,6 +1,7 @@
 package main;
 
 import fmt "core:fmt";
+import os "core:os";
 import nx "../nexa";
 
 WINDOW_WIDTH :: 1280;
@@ -15,21 +16,34 @@ square: Square;
 anim: ^nx.Animation;
 cam: nx.Camera2D;
 
+audio: nx.Audio;
+
+font: nx.Font;
+
 init :: proc() {
-	nx.play_music_looped("./res/music.wav");
+	music := nx.load_music("./res/music.wav");
+	nx.play_music_looped(music);
 
 	square_tex := nx.load_texture("./res/newnexa.png");
 	square.tex = square_tex;
-	square.x = f32(WINDOW_WIDTH / 2) - f32(square.tex.width / 2);
-	square.y = f32(WINDOW_HEIGHT / 2) - f32(square.tex.height / 2);
+	square.x = 0;
+	square.y = 0;
 
 	anim_tex := nx.load_texture("./res/character_spritesheet.png");
 	anim = nx.create_animation(anim_tex, 48, 48, 6, 0.1, 11, 16);
 
-	cam = {0, 0, 1.0};
+	cam = {nx.Vector2{WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2}, nx.Vector2{0, 0}, 0, 1.0};
+
+	audio = nx.load_audio("./res/sfx.wav");
+
+	font = nx.load_font("./res/arial.ttf", 50);
 }
 
 update :: proc(dt: f32) {
+	if nx.is_key_pressed(.ESCAPE) {
+		os.exit(0);
+	}
+
 	if nx.is_key_down(.W) {
 		square.y -= 400 * dt;
 	}
@@ -43,10 +57,15 @@ update :: proc(dt: f32) {
 		square.x += 400 * dt;
 	}
 
-	nx.camera_follow(&cam, i32(square.x), i32(square.y));
+	// Update camera to follow the square's position
+	nx.camera_follow(&cam, square.x, square.y);
+
+	// You can also manually adjust the camera's position here if needed, for instance:
+	// cam.position.x = square.x - WINDOW_WIDTH / 2;
+	// cam.position.y = square.y - WINDOW_HEIGHT / 2;
 
 	if nx.is_key_pressed(.P) {
-		nx.play_audio("./res/sfx.wav");
+		nx.play_audio(audio);
 	}
 
 	if nx.is_mouse_button_pressed(.LEFT) {
@@ -58,9 +77,8 @@ update :: proc(dt: f32) {
 
 	nx.run_animation(anim, dt, true);
 
-	x, y: i32;
-	nx.get_mouse_position(&x, &y);
-	fmt.printf("x: %d, y: %d\n", x, y);
+	mouse_pos := nx.get_mouse_position();
+	fmt.printf("x: %d, y: %d\n", mouse_pos.x, mouse_pos.y);
 
 	fmt.println(square.x, square.y);
 }
@@ -68,19 +86,21 @@ update :: proc(dt: f32) {
 render :: proc() {
 	nx.clear_screen(nx.CORNFLOWERBLUE);
 
-	nx.apply_camera(&cam);
+	nx.apply_camera(cam);
 
-	nx.render_texture(&square.tex, i32(square.x), i32(square.y), 0.0, false);
+	nx.render_texture(square.tex, square.x, square.y, 0.0, false, false);
 
 	nx.render_rect_line(300, 60, 64, 64, nx.RED);
-	nx.render_rect_filled(300, 400, 64, 64, nx.WHITE);
+    nx.render_rect_filled(300, 400, 64, 64, nx.WHITE);
 
-	nx.render_circle_line(320, 240, 100, nx.GREEN);
-	nx.render_circle_filled(320, 600, 100, nx.YELLOW);
+    nx.render_circle_line(320, 240, 100, nx.GREEN);
+    nx.render_circle_filled(320, 600, 100, nx.YELLOW);
 
-	nx.render_text(nx.load_font("./res/arial.ttf", 50), "Hello World!", nx.BLACK, 0, 0);
+    nx.render_text(font, "Hello World!", 50, 16, nx.BLACK, 0, 0);
 
-	nx.render_animation(anim, 100, 100, 0.0, false);
+    nx.render_animation(anim, 100, 100, 0.0, false, false);
+
+    nx.end_camera();
 }
 
 main :: proc() {
